@@ -12,7 +12,7 @@ namespace CentralErros
         // retorna a lista (detalhada) de todos os erros de um tipo de level individualmente
         List<OcorrenciaErro> ListarTodasOcorrencias(int level);
 
-        // retorna 
+        // retorna a lista (resumida) dos erros agrupados de acordo com o level e a quantidade de vezes que ele repete
         List<OcorrenciaErro> Consulta(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado);
 
 
