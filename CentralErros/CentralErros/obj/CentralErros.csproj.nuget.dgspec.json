@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Convex\\source\\repos\\CentralErros\\CentralErros\\CentralErros.csproj": {}
+    "C:\\Users\\Convex\\codenation\\central-erros\\CentralErros\\CentralErros\\CentralErros.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Convex\\source\\repos\\CentralErros\\CentralErros\\CentralErros.csproj": {
+    "C:\\Users\\Convex\\codenation\\central-erros\\CentralErros\\CentralErros\\CentralErros.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Convex\\source\\repos\\CentralErros\\CentralErros\\CentralErros.csproj",
+        "projectUniqueName": "C:\\Users\\Convex\\codenation\\central-erros\\CentralErros\\CentralErros\\CentralErros.csproj",
         "projectName": "CentralErros",
-        "projectPath": "C:\\Users\\Convex\\source\\repos\\CentralErros\\CentralErros\\CentralErros.csproj",
+        "projectPath": "C:\\Users\\Convex\\codenation\\central-erros\\CentralErros\\CentralErros\\CentralErros.csproj",
         "packagesPath": "C:\\Users\\Convex\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Convex\\source\\repos\\CentralErros\\CentralErros\\obj\\",
+        "outputPath": "C:\\Users\\Convex\\codenation\\central-erros\\CentralErros\\CentralErros\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

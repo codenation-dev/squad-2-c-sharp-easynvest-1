@@ -6,8 +6,7 @@ namespace CentralErros
 {
     interface IError
     {
-        string Consulta();
-
-
+        bool CadastraErro(int id, int idAmbiente, int idLevel, int idSituacai, string titulo);
+        Error ConsultaErro(int id);
     }
 }
