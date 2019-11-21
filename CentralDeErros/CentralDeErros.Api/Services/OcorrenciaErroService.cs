@@ -15,6 +15,7 @@ namespace CentralDeErros.Api.Services
         {
             this._context = context;
         }
+
         public bool CadastrarErro(Error error, User user, string origem, string detalhe, DateTime dataHora, string userToken)
         {
             _context.OcorrenciaErros.Add(new OcorrenciaErro { Error = error, User = user, Origem = origem, Detalhes = detalhe, Data_Hora = dataHora });
