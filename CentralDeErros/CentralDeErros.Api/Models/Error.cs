@@ -15,29 +15,29 @@ namespace CentralDeErros.Api.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Column("ambiente_id"), Required]
+        [ForeignKey("ambiente_id"), Required]
         public int Ambiente_Id { get; set; }
 
-        [ForeignKey("AmbienteId"), Required]
+        [Column("AmbienteId"), Required]
         public Ambiente Ambiente { get; set; }// referencia 
 
-        [Column("level_id"), Required]
+        [ForeignKey("level_id"), Required]
         public int Level_Id { get; set; }
 
-        [ForeignKey("LevelId"), Required]
+        [Column("LevelId"), Required]
         public Level Level { get; set; }// referencia 
 
-        [Column("situacao_id"), Required]
+        [ForeignKey("situacao_id"), Required]
         public int Situacao_Id { get; set; }
 
-        [ForeignKey("SituacaoId"), Required]
+        [Column("SituacaoId"), Required]
         public Situacao Situacao { get; set; }// referencia 
 
-        [Column("ocorrencia_id"), Required]
-        public int Ocorrencia_Id { get; set; }
+        //[Column("ocorrencia_id"), Required]
+        //public int Ocorrencia_Id { get; set; }
 
-        [ForeignKey("OcorrenciaId"), Required]
-        public OcorrenciaErro OcorrenciaErros { get; set; }// referencia 
+        //[ForeignKey("OcorrenciaId"), Required]
+        //public OcorrenciaErro OcorrenciaErros { get; set; }// referencia 
 
         [Column("titulo")]
         [StringLength(200)]

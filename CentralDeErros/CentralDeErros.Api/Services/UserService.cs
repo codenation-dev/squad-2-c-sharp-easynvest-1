@@ -10,6 +10,11 @@ namespace CentralDeErros.Api.Services
     {
         private ErroDbContext _context;
 
+        public UserService (ErroDbContext context)
+        {
+            this._context = context;
+        }
+        
         public bool Cadastrar(string email, string password, string name)
         {
             _context.Users.Add(new User { Email = email, Password = password, Name = name });

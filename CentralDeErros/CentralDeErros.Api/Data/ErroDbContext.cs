@@ -15,7 +15,7 @@ namespace CentralDeErros.Api.Models
         {
             //esta configurado com o nome do meu banco, trocar para  testar
             if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer(@"Server=CONQUISTA\SQLEXPRESS\;Database=CentralDeErros;Trusted_Connection=True");
+                optionsBuilder.UseSqlServer(@"Server=DESKTOP-R629N29\SQLEXPRESS;Database=CentralDeErros;Trusted_Connection=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

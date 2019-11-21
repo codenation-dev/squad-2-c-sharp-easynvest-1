@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CentralDeErros.Api.Migrations
 {
     [DbContext(typeof(ErroDbContext))]
-    [Migration("20191112234014_CentralErros")]
-    partial class CentralErros
+    [Migration("20191121011704_PrimeiraMigracao")]
+    partial class PrimeiraMigracao
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,28 +40,16 @@ namespace CentralDeErros.Api.Migrations
 
             modelBuilder.Entity("CentralDeErros.Api.Models.Error", b =>
                 {
-                    b.Property<int>("Situacao_Id")
-                        .HasColumnName("situacao_id");
+                    b.Property<int>("Situacao_Id");
 
-                    b.Property<int>("Ambiente_Id")
-                        .HasColumnName("ambiente_id");
+                    b.Property<int>("Ambiente_Id");
 
-                    b.Property<int>("Level_Id")
-                        .HasColumnName("level_id");
-
-                    b.Property<int>("AmbienteId");
+                    b.Property<int>("Level_Id");
 
                     b.Property<int>("Id")
-                        .HasColumnName("id");
-
-                    b.Property<int>("LevelId");
-
-                    b.Property<int>("OcorrenciaId");
-
-                    b.Property<int>("Ocorrencia_Id")
-                        .HasColumnName("ocorrencia_id");
-
-                    b.Property<int>("SituacaoId");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Titulo")
                         .IsRequired()
@@ -72,13 +60,9 @@ namespace CentralDeErros.Api.Migrations
 
                     b.HasAlternateKey("Id");
 
-                    b.HasIndex("AmbienteId");
+                    b.HasIndex("Ambiente_Id");
 
-                    b.HasIndex("LevelId");
-
-                    b.HasIndex("OcorrenciaId");
-
-                    b.HasIndex("SituacaoId");
+                    b.HasIndex("Level_Id");
 
                     b.ToTable("error");
                 });
@@ -115,19 +99,26 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("detalhes")
                         .HasMaxLength(2000);
 
+                    b.Property<int>("Erro_Id");
+
+                    b.Property<int>("ErrorAmbiente_Id");
+
+                    b.Property<int>("ErrorLevel_Id");
+
+                    b.Property<int>("ErrorSituacao_Id");
+
                     b.Property<string>("Origem")
                         .IsRequired()
                         .HasColumnName("origem")
                         .HasMaxLength(200);
 
-                    b.Property<int>("UserId");
-
-                    b.Property<int>("User_Id")
-                        .HasColumnName("user_id");
+                    b.Property<int>("User_Id");
 
                     b.HasKey("Ocorrencia_Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("User_Id");
+
+                    b.HasIndex("ErrorSituacao_Id", "ErrorAmbiente_Id", "ErrorLevel_Id");
 
                     b.ToTable("ocorrenciaerro");
                 });
@@ -185,22 +176,17 @@ namespace CentralDeErros.Api.Migrations
                 {
                     b.HasOne("CentralDeErros.Api.Models.Ambiente", "Ambiente")
                         .WithMany("Errors")
-                        .HasForeignKey("AmbienteId")
+                        .HasForeignKey("Ambiente_Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CentralDeErros.Api.Models.Level", "Level")
                         .WithMany("Errors")
-                        .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CentralDeErros.Api.Models.OcorrenciaErro", "OcorrenciaErros")
-                        .WithMany()
-                        .HasForeignKey("OcorrenciaId")
+                        .HasForeignKey("Level_Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CentralDeErros.Api.Models.Situacao", "Situacao")
                         .WithMany("Errors")
-                        .HasForeignKey("SituacaoId")
+                        .HasForeignKey("Situacao_Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -208,7 +194,12 @@ namespace CentralDeErros.Api.Migrations
                 {
                     b.HasOne("CentralDeErros.Api.Models.User", "User")
                         .WithMany("OcorrenciaErros")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CentralDeErros.Api.Models.Error", "Error")
+                        .WithMany()
+                        .HasForeignKey("ErrorSituacao_Id", "ErrorAmbiente_Id", "ErrorLevel_Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

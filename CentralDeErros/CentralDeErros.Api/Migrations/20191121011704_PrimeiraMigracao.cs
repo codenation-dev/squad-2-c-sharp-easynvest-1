@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CentralDeErros.Api.Migrations
 {
-    public partial class CentralErros : Migration
+    public partial class PrimeiraMigracao : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,6 +64,41 @@ namespace CentralDeErros.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "error",
+                columns: table => new
+                {
+                    Ambiente_Id = table.Column<int>(nullable: false),
+                    Level_Id = table.Column<int>(nullable: false),
+                    Situacao_Id = table.Column<int>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    titulo = table.Column<string>(maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_error", x => new { x.Situacao_Id, x.Ambiente_Id, x.Level_Id });
+                    table.UniqueConstraint("AK_error_id", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_error_ambiente_Ambiente_Id",
+                        column: x => x.Ambiente_Id,
+                        principalTable: "ambiente",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_error_level_Level_Id",
+                        column: x => x.Level_Id,
+                        principalTable: "level",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_error_situacao_Situacao_Id",
+                        column: x => x.Situacao_Id,
+                        principalTable: "situacao",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ocorrenciaerro",
                 columns: table => new
                 {
@@ -72,93 +107,58 @@ namespace CentralDeErros.Api.Migrations
                     origem = table.Column<string>(maxLength: 200, nullable: false),
                     detalhes = table.Column<string>(maxLength: 2000, nullable: false),
                     data_hora = table.Column<DateTime>(nullable: false),
-                    user_id = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    User_Id = table.Column<int>(nullable: false),
+                    Erro_Id = table.Column<int>(nullable: false),
+                    ErrorSituacao_Id = table.Column<int>(nullable: false),
+                    ErrorAmbiente_Id = table.Column<int>(nullable: false),
+                    ErrorLevel_Id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ocorrenciaerro", x => x.id);
                     table.ForeignKey(
-                        name: "FK_ocorrenciaerro_user_UserId",
-                        column: x => x.UserId,
+                        name: "FK_ocorrenciaerro_user_User_Id",
+                        column: x => x.User_Id,
                         principalTable: "user",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "error",
-                columns: table => new
-                {
-                    ambiente_id = table.Column<int>(nullable: false),
-                    level_id = table.Column<int>(nullable: false),
-                    situacao_id = table.Column<int>(nullable: false),
-                    id = table.Column<int>(nullable: false),
-                    AmbienteId = table.Column<int>(nullable: false),
-                    LevelId = table.Column<int>(nullable: false),
-                    SituacaoId = table.Column<int>(nullable: false),
-                    ocorrencia_id = table.Column<int>(nullable: false),
-                    OcorrenciaId = table.Column<int>(nullable: false),
-                    titulo = table.Column<string>(maxLength: 200, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_error", x => new { x.situacao_id, x.ambiente_id, x.level_id });
-                    table.UniqueConstraint("AK_error_id", x => x.id);
                     table.ForeignKey(
-                        name: "FK_error_ambiente_AmbienteId",
-                        column: x => x.AmbienteId,
-                        principalTable: "ambiente",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_error_level_LevelId",
-                        column: x => x.LevelId,
-                        principalTable: "level",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_error_ocorrenciaerro_OcorrenciaId",
-                        column: x => x.OcorrenciaId,
-                        principalTable: "ocorrenciaerro",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_error_situacao_SituacaoId",
-                        column: x => x.SituacaoId,
-                        principalTable: "situacao",
-                        principalColumn: "id",
+                        name: "FK_ocorrenciaerro_error_ErrorSituacao_Id_ErrorAmbiente_Id_ErrorLevel_Id",
+                        columns: x => new { x.ErrorSituacao_Id, x.ErrorAmbiente_Id, x.ErrorLevel_Id },
+                        principalTable: "error",
+                        principalColumns: new[] { "Situacao_Id", "Ambiente_Id", "Level_Id" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_error_AmbienteId",
+                name: "IX_error_Ambiente_Id",
                 table: "error",
-                column: "AmbienteId");
+                column: "Ambiente_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_error_LevelId",
+                name: "IX_error_Level_Id",
                 table: "error",
-                column: "LevelId");
+                column: "Level_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_error_OcorrenciaId",
-                table: "error",
-                column: "OcorrenciaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_error_SituacaoId",
-                table: "error",
-                column: "SituacaoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ocorrenciaerro_UserId",
+                name: "IX_ocorrenciaerro_User_Id",
                 table: "ocorrenciaerro",
-                column: "UserId");
+                column: "User_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ocorrenciaerro_ErrorSituacao_Id_ErrorAmbiente_Id_ErrorLevel_Id",
+                table: "ocorrenciaerro",
+                columns: new[] { "ErrorSituacao_Id", "ErrorAmbiente_Id", "ErrorLevel_Id" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ocorrenciaerro");
+
+            migrationBuilder.DropTable(
+                name: "user");
+
             migrationBuilder.DropTable(
                 name: "error");
 
@@ -169,13 +169,7 @@ namespace CentralDeErros.Api.Migrations
                 name: "level");
 
             migrationBuilder.DropTable(
-                name: "ocorrenciaerro");
-
-            migrationBuilder.DropTable(
                 name: "situacao");
-
-            migrationBuilder.DropTable(
-                name: "user");
         }
     }
 }

@@ -15,11 +15,11 @@ namespace CentralDeErros.Api.Services
         {
             this._context = context;
         }
-        public bool CadastrarErro(int erroId, string origem, string detalhe, DateTime dataHora, string userToken)
+        public bool CadastrarErro(Error error, User user, string origem, string detalhe, DateTime dataHora, string userToken)
         {
-            _context.OcorrenciaErros.Add(new OcorrenciaErro { Erro_Id = erroId, Origem = origem, Detalhes = detalhe, Data_Hora = dataHora });
+            _context.OcorrenciaErros.Add(new OcorrenciaErro { Error = error, User = user, Origem = origem, Detalhes = detalhe, Data_Hora = dataHora });
 
-            if (_context.OcorrenciaErros.FirstOrDefault(e => e.Erro_Id == erroId && e.Origem == origem && e.Detalhes == detalhe && e.Data_Hora == dataHora) != null)
+            if (_context.OcorrenciaErros.FirstOrDefault(e => e.Error == error && e.User == user && e.Origem == origem && e.Detalhes == detalhe && e.Data_Hora == dataHora) != null)
             {
                 return true;
             }

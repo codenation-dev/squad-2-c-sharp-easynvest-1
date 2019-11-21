@@ -9,7 +9,7 @@ namespace CentralDeErros.Api.Services
     interface IOcorrenciaErroService
     {
         // cadastra e retorna sucesso ou falha
-        bool CadastrarErro(int erroId, string origem, string detalhe, DateTime dataHora, string userToken);
+        bool CadastrarErro(Error error, User user, string origem, string detalhe, DateTime dataHora, string userToken);
 
         // retorna a lista (detalhada) de todos os erros de um tipo de level individualmente
         List<OcorrenciaErro> ListarOcorrenciasPorLevel(int level);

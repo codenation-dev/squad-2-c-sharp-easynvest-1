@@ -39,16 +39,16 @@ namespace CentralDeErros.Api.Models
         //[Required]
         //public string Nome_User{ get; set; }
 
-        [Column("user_id"), Required]
+        [ForeignKey("user_id"), Required]
         public int User_Id { get; set; }
 
-        [ForeignKey("UserId"), Required]
+        [Column("UserId"), Required]
         public User User { get; set; }// referencia 
 
-        [Column("erro_id"), Required]
+        [ForeignKey("erro_id"), Required]
         public int Erro_Id { get; set; }
 
-        [ForeignKey("ErroId"), Required]
+        [Column("ErroId"), Required]
         public Error Error { get; set; }// referencia 
 
         // public ICollection<Error> Errors{ get; set; }//uma ocorrência pode ter varios erros
