@@ -22,14 +22,14 @@ namespace CentralDeErros.Api.Controllers
 
         // GET: api/OcorrenciasErros
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OcorrenciaErro>>> GetOcorrenciaErros()
+        public async Task<ActionResult<IEnumerable<ErrorOccurrence>>> GetOcorrenciaErros()
         {
             return await _context.OcorrenciaErros.ToListAsync();
         }
 
         // GET: api/OcorrenciasErros/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OcorrenciaErro>> GetOcorrenciaErro(int id)
+        public async Task<ActionResult<ErrorOccurrence>> GetOcorrenciaErro(int id)
         {
             var ocorrenciaErro = await _context.OcorrenciaErros.FindAsync(id);
 
@@ -43,7 +43,7 @@ namespace CentralDeErros.Api.Controllers
 
         // PUT: api/OcorrenciasErros/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOcorrenciaErro(int id, OcorrenciaErro ocorrenciaErro)
+        public async Task<IActionResult> PutOcorrenciaErro(int id, ErrorOccurrence ocorrenciaErro)
         {
             if (id != ocorrenciaErro.Ocorrencia_Id)
             {
@@ -73,7 +73,7 @@ namespace CentralDeErros.Api.Controllers
 
         // POST: api/OcorrenciasErros
         [HttpPost]
-        public async Task<ActionResult<OcorrenciaErro>> PostOcorrenciaErro(OcorrenciaErro ocorrenciaErro)
+        public async Task<ActionResult<ErrorOccurrence>> PostOcorrenciaErro(ErrorOccurrence ocorrenciaErro)
         {
             _context.OcorrenciaErros.Add(ocorrenciaErro);
             await _context.SaveChangesAsync();
@@ -83,7 +83,7 @@ namespace CentralDeErros.Api.Controllers
 
         // DELETE: api/OcorrenciasErros/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<OcorrenciaErro>> DeleteOcorrenciaErro(int id)
+        public async Task<ActionResult<ErrorOccurrence>> DeleteOcorrenciaErro(int id)
         {
             var ocorrenciaErro = await _context.OcorrenciaErros.FindAsync(id);
             if (ocorrenciaErro == null)

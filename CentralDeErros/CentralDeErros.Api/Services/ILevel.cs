@@ -8,10 +8,10 @@ namespace CentralDeErros.Api.Services
 {
     interface ILevel
     {
-        bool CadastrarLevel(string nome);
+        bool RegisterLevel(string name);
 
-        Level ConsultarLevel(int id);
+        Level ConsultLevel(int id);
 
-        List<Level> ConsultarTodosLevels();
+        List<Level> ConsultAllLevels();
     }
 }

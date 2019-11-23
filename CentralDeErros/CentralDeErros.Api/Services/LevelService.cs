@@ -8,18 +8,18 @@ namespace CentralDeErros.Api.Services
 {
     public class LevelService : ILevel
     {
-        public ErroDbContext _context;
+        public ErrorDbContext _context;
 
-        public LevelService(ErroDbContext context)
+        public LevelService(ErrorDbContext context)
         {
             this._context = context;
         }
 
-        public bool CadastrarLevel(string nome)
+        public bool RegisterLevel(string name)
         {
-            _context.Levels.Add(new Level { Nome_Level = nome });
+            _context.Levels.Add(new Level { LevelName = name });
 
-            if (_context.Levels.FirstOrDefault(l => l.Nome_Level == nome) != null)
+            if (_context.Levels.FirstOrDefault(l => l.LevelName == name) != null)
             {
                 return true;
             }
@@ -27,12 +27,12 @@ namespace CentralDeErros.Api.Services
             return false;
         }
 
-        public Level ConsultarLevel(int id)
+        public Level ConsultLevel(int id)
         {
             return _context.Levels.Find(id);
         }
 
-        public List<Level> ConsultarTodosLevels()
+        public List<Level> ConsultAllLevels()
         {
             return _context.Levels.Select(l => l).ToList();
         }

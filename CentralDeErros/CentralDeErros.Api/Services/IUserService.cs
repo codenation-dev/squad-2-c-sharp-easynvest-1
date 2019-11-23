@@ -7,8 +7,8 @@ namespace CentralDeErros.Api.Services
 {
     interface IUserService
     {
-        bool Cadastrar(string email, string password, string name);
+        bool RegisterUser(string email, string password, string name);
 
-        bool Logar(string email, string password);
+        bool Login(string email, string password);
     }
 }

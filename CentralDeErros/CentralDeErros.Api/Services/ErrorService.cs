@@ -1,26 +1,23 @@
 ﻿using CentralDeErros.Api.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Services
 {
     public class ErrorService : IErrorService
     {
 
-        private ErroDbContext _context;
+        private ErrorDbContext _context;
 
-        public ErrorService(ErroDbContext context)
+        public ErrorService(ErrorDbContext context)
         {
             this._context = context;
         }
 
-        public bool CadastraErro(int idAmbiente, int idLevel, int idSituacao, string titulo)
+        public bool RegisterError(int environmentId, int levelId, int situationId, string title)
         {
-            _context.Errors.Add(new Error { Ambiente_Id = idAmbiente, Level_Id = idLevel, Situacao_Id = idSituacao, Titulo = titulo });
+            _context.Errors.Add(new Error { EnvironmentId = environmentId, LevelId = levelId, SituationId = situationId, Title = title });
 
-            if (_context.Errors.FirstOrDefault(e => e.Ambiente_Id == idAmbiente && e.Level_Id == idLevel && e.Situacao_Id == idSituacao && e.Titulo == titulo) != null)
+            if (_context.Errors.FirstOrDefault(e => e.EnvironmentId == environmentId && e.LevelId == levelId && e.SituationId == situationId && e.Title == title) != null)
             {
                 return true;
             }
@@ -28,7 +25,7 @@ namespace CentralDeErros.Api.Services
             return false;
         }
 
-        public Error ConsultaErro(int id)
+        public Error ConsultError(int id)
         {
             return _context.Errors.Find(id);
         }
