@@ -11,15 +11,15 @@ namespace CentralDeErros.Api.DTOs
         public int Id { get; set; }
 
         [Required]
-        public int Ambiente_Id { get; set; }
+        public int EnvironmentId { get; set; }
 
         [Required]
-        public int Level_Id { get; set; }
+        public int LevelId { get; set; }
 
         [Required]
-        public int Situacao_Id { get; set; }
+        public int SituationId { get; set; }
 
         [Required]
-        public string Titulo { get; set; }
+        public string Title { get; set; }
     }
 }

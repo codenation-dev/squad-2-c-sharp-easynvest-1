@@ -8,7 +8,7 @@ namespace CentralDeErros.Api.DTOs
 {
     public class UserDTO
     {
-        public int User_Id { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         public string Name { get; set; }
