@@ -13,9 +13,9 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class LevelsController : ControllerBase
     {
-        private readonly ErroDbContext _context;
+        private readonly ErrorDbContext _context;
 
-        public LevelsController(ErroDbContext context)
+        public LevelsController(ErrorDbContext context)
         {
             _context = context;
         }
@@ -45,7 +45,7 @@ namespace CentralDeErros.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLevel(int id, Level level)
         {
-            if (id != level.Level_Id)
+            if (id != level.LevelId)
             {
                 return BadRequest();
             }
@@ -78,7 +78,7 @@ namespace CentralDeErros.Api.Controllers
             _context.Levels.Add(level);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetLevel", new { id = level.Level_Id }, level);
+            return CreatedAtAction("GetLevel", new { id = level.LevelId }, level);
         }
 
         // DELETE: api/Levels/5
@@ -99,7 +99,7 @@ namespace CentralDeErros.Api.Controllers
 
         private bool LevelExists(int id)
         {
-            return _context.Levels.Any(e => e.Level_Id == id);
+            return _context.Levels.Any(e => e.LevelId == id);
         }
     }
 }

@@ -13,9 +13,9 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly ErroDbContext _context;
+        private readonly ErrorDbContext _context;
 
-        public UsersController(ErroDbContext context)
+        public UsersController(ErrorDbContext context)
         {
             _context = context;
         }
@@ -45,7 +45,7 @@ namespace CentralDeErros.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != user.User_Id)
+            if (id != user.UserId)
             {
                 return BadRequest();
             }
@@ -78,7 +78,7 @@ namespace CentralDeErros.Api.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.User_Id }, user);
+            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
 
         // DELETE: api/Users/5
@@ -99,7 +99,7 @@ namespace CentralDeErros.Api.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.User_Id == id);
+            return _context.Users.Any(e => e.UserId == id);
         }
     }
 }

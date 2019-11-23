@@ -13,9 +13,9 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class ErrorsController : ControllerBase
     {
-        private readonly ErroDbContext _context;
+        private readonly ErrorDbContext _context;
 
-        public ErrorsController(ErroDbContext context)
+        public ErrorsController(ErrorDbContext context)
         {
             _context = context;
         }
@@ -45,7 +45,7 @@ namespace CentralDeErros.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutError(int id, Error error)
         {
-            if (id != error.Situacao_Id)
+            if (id != error.SituationId)
             {
                 return BadRequest();
             }
@@ -82,7 +82,7 @@ namespace CentralDeErros.Api.Controllers
             }
             catch (DbUpdateException)
             {
-                if (ErrorExists(error.Situacao_Id))
+                if (ErrorExists(error.SituationId))
                 {
                     return Conflict();
                 }
@@ -92,7 +92,7 @@ namespace CentralDeErros.Api.Controllers
                 }
             }
 
-            return CreatedAtAction("GetError", new { id = error.Situacao_Id }, error);
+            return CreatedAtAction("GetError", new { id = error.SituationId }, error);
         }
 
         // DELETE: api/Errors/5
@@ -113,7 +113,7 @@ namespace CentralDeErros.Api.Controllers
 
         private bool ErrorExists(int id)
         {
-            return _context.Errors.Any(e => e.Situacao_Id == id);
+            return _context.Errors.Any(e => e.SituationId == id);
         }
     }
 }
