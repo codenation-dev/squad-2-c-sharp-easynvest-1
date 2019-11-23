@@ -18,7 +18,7 @@ namespace CentralDeErros.Api.Services
 
         public bool CadastrarErro(Error error, User user, string origem, string detalhe, DateTime dataHora, string userToken)
         {
-            _context.OcorrenciaErros.Add(new OcorrenciaErro { Error = error, User = user, Origem = origem, Detalhes = detalhe, Data_Hora = dataHora });
+            _context.OcorrenciaErros.Add(new ErrorOcurrence { Error = error, User = user, Origem = origem, Detalhes = detalhe, Data_Hora = dataHora });
 
             if (_context.OcorrenciaErros.FirstOrDefault(e => e.Error == error && e.User == user && e.Origem == origem && e.Detalhes == detalhe && e.Data_Hora == dataHora) != null)
             {
@@ -28,7 +28,7 @@ namespace CentralDeErros.Api.Services
             return false;
         }
 
-        public List<OcorrenciaErro> Consulta(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado)
+        public List<ErrorOcurrence> Consulta(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado)
         {
             // dado vem do frontEnd
 
@@ -64,7 +64,7 @@ namespace CentralDeErros.Api.Services
             return _context.OcorrenciaErros.Where(o => o.Error.Ambiente_Id == ambiente).ToList();
         }
 
-        public List<OcorrenciaErro> ListarOcorrenciasPorLevel(int level)
+        public List<ErrorOcurrence> ListarOcorrenciasPorLevel(int level)
         {
             return _context.OcorrenciaErros.Where(o => o.Error.Level_Id == level).ToList();
         }

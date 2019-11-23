@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Models
 {
-    [Table ("level")]
+    [Table ("LEVEL")]
     public class Level
     {
-        [Column("id")]
+        [Column("ID")]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Level_Id { get; set; }
+        public int LevelId { get; set; }
 
-        [Column("level")]
+        [Column("LEVEL")]
         [StringLength(30)]
         [Required]
-        public string Nome_Level { get; set; }
+        public string LevelName { get; set; }
 
-        public ICollection<Error> Errors { get; set; }//um level pode ter varios erros
+        public ICollection<Error> Errors { get; set; }
     }
 }

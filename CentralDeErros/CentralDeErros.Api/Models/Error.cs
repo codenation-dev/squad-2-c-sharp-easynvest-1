@@ -7,41 +7,45 @@ using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Models
 {
-    [Table("error")]
+    [Table("ERROR")]
     public class Error
     {
-        [Column("id")]
+        [Column("ID")]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [ForeignKey("ambiente_id"), Required]
-        public int Ambiente_Id { get; set; }
+        [Column("CODE")]
+        [Required]
+        public int Code { get; set; }
 
-        [Column("AmbienteId"), Required]
-        public Ambiente Ambiente { get; set; }// referencia 
-
-        [ForeignKey("level_id"), Required]
-        public int Level_Id { get; set; }
-
-        [Column("LevelId"), Required]
-        public Level Level { get; set; }// referencia 
-
-        [ForeignKey("situacao_id"), Required]
-        public int Situacao_Id { get; set; }
-
-        [Column("SituacaoId"), Required]
-        public Situacao Situacao { get; set; }// referencia 
-
-        //[Column("ocorrencia_id"), Required]
-        //public int Ocorrencia_Id { get; set; }
-
-        //[ForeignKey("OcorrenciaId"), Required]
-        //public OcorrenciaErro OcorrenciaErros { get; set; }// referencia 
-
-        [Column("titulo")]
+        [Column("TITLE")]
         [StringLength(200)]
         [Required]
-        public string Titulo { get; set; }
+        public string Title { get; set; }
+
+        [Column("DESCRIPTION")]
+        [StringLength(200)]
+        [Required]
+        public string Description { get; set; }
+
+        [ForeignKey("ENVIRONMENT_ID"), Required]
+        public int EnvironmentId { get; set; }
+
+        [Column("ENVIRONMENT_ID"), Required]
+        public Environment Environment { get; set; }// referencia 
+
+        [ForeignKey("LEVEL_ID"), Required]
+        public int LevelId { get; set; }
+
+        [Column("LEVEL_ID"), Required]
+        public Level Level { get; set; }// referencia 
+
+        [ForeignKey("SITUATION_ID"), Required]
+        public int SituationId { get; set; }
+
+        [Column("SITUATION_ID"), Required]
+        public Situation Situation { get; set; }// referencia 
+
     }
 }

@@ -6,7 +6,7 @@ namespace CentralDeErros.Api.Models
     {
         public DbSet<Error> Errors { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<OcorrenciaErro> OcorrenciaErros { get; set; }
+        public DbSet<ErrorOcurrence> OcorrenciaErros { get; set; }
         public DbSet<Situacao> Situacoes { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Ambiente> Ambientes { get; set; }

@@ -7,35 +7,35 @@ using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Models
 {
-    [Table ("user")]
+    [Table ("USER")]
     public class User
     {
-        [Column("id")]
+        [Column("ID")]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
-        public int User_Id { get; set; }
+        public int UserId { get; set; }
 
-        [Column("name")]
+        [Column("NAME")]
         [StringLength(200)]
         [Required]
         public string Name { get; set; }
 
-        [Column("email")]
+        [Column("EMAIL")]
         [StringLength(200)]
         [Required]
         public string Email { get; set; }
 
-        [Column("password")]
+        [Column("PASSWORD")]
         [StringLength(50)]
         [Required]
         public string Password { get; set; }
 
-        [Column("token")]
+        [Column("TOKEN")]
         [MaxLength(40)]
         [Required]
         public string Token { get; set; }
 
-        public ICollection<OcorrenciaErro> OcorrenciaErros { get; set; }//um usuario pode ter varios erros
+        public ICollection<ErrorOccurrence> ErrorOccurrences { get; set; }
 
     }
 }

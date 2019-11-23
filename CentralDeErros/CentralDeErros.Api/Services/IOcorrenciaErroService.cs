@@ -12,10 +12,10 @@ namespace CentralDeErros.Api.Services
         bool CadastrarErro(Error error, User user, string origem, string detalhe, DateTime dataHora, string userToken);
 
         // retorna a lista (detalhada) de todos os erros de um tipo de level individualmente
-        List<OcorrenciaErro> ListarOcorrenciasPorLevel(int level);
+        List<ErrorOcurrence> ListarOcorrenciasPorLevel(int level);
 
         // retorna 
-        List<OcorrenciaErro> Consulta(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado);
+        List<ErrorOcurrence> Consulta(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado);
 
     }
 }
