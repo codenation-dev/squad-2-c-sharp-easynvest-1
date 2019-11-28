@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CentralDeErros.Api.Models;
+using CentralDeErros.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,16 @@ namespace CentralDeErros.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddDbContext<ErrorDbContext>();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<IEnvironment, EnvironmentService>();
+            services.AddScoped<IErrorOccurrenceService, ErrorOccurrenceService>();
+            services.AddScoped<IErrorService, ErrorService>();
+            services.AddScoped<ILevel, LevelService>();
+            services.AddScoped<ISituation, SituationService>();
+            services.AddScoped<IUserService, IUserService>();
 
         }
 

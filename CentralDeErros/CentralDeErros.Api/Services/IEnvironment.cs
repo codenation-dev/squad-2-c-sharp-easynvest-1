@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace CentralDeErros.Api.Services
 {
-    interface IEnvironment
+    public interface IEnvironment
     {
-        bool RegisterEnvironment (string name);
+        Models.Environment RegisterEnvironment (Models.Environment environment);
 
         Models.Environment ConsultEnvironment(int id);
 

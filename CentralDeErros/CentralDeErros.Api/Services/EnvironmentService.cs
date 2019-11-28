@@ -1,4 +1,5 @@
 ﻿using CentralDeErros.Api.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +16,21 @@ namespace CentralDeErros.Api.Services
             this._context = context;
         }
 
-        public bool RegisterEnvironment(string name)
+        public Models.Environment RegisterEnvironment(Models.Environment environment)
         {
-            _context.Environments.Add(new Models.Environment { EnvironmentName = name });
+            //_context.Environments.Add(new Models.Environment { EnvironmentName = name });
 
-            if (_context.Environments.FirstOrDefault(e => e.EnvironmentName == name) != null)
-            {
-                return true;
-            }
+            //if (_context.Environments.FirstOrDefault(e => e.EnvironmentName == name) != null)
+            //{
+            //    return true;
+            //}
 
-            return false;
+            //return false;
+
+            var state = environment.Environment_Id == 0 ? EntityState.Added : EntityState.Modified;
+            _context.Entry(environment).State = state;
+            _context.SaveChanges();
+            return environment;
         }
 
         public Models.Environment ConsultEnvironment(int id)

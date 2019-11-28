@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
+using CentralDeErros.Api.Services;
+using CentralDeErros.Api.DTOs;
+using AutoMapper;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -14,31 +17,34 @@ namespace CentralDeErros.Api.Controllers
     public class EnvironmentsController : ControllerBase
     {
         private readonly ErrorDbContext _context;
+        private readonly IEnvironment _service;
+        private readonly IMapper _mapper;
 
-        public EnvironmentsController(ErrorDbContext context)
+        public EnvironmentsController(IMapper mapper, IEnvironment service)
         {
-            _context = context;
+            _service = service;
+            _mapper = mapper;
         }
 
         // GET: api/Environments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Environment>>> GetEnvironments()
+        public ActionResult<IEnumerable<EnvironmentDTO>> GetEnvironments()
         {
-            return await _context.Environments.ToListAsync();
+            return Ok(_mapper.Map<EnvironmentDTO>(_service.ConsultAllEnvironments()));
         }
 
         // GET: api/Environments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Models.Environment>> GetEnvironment(int id)
+        public ActionResult<EnvironmentDTO> GetEnvironment(int id)
         {
-            var environment = await _context.Environments.FindAsync(id);
+            var environment = _service.ConsultEnvironment(id);
 
             if (environment == null)
             {
                 return NotFound();
             }
 
-            return environment;
+            return Ok(_mapper.Map<EnvironmentDTO>(environment));
         }
 
         // PUT: api/Environments/5
@@ -73,29 +79,29 @@ namespace CentralDeErros.Api.Controllers
 
         // POST: api/Environments
         [HttpPost]
-        public async Task<ActionResult<Models.Environment>> PostEnvironment(Models.Environment environment)
+        public ActionResult<EnvironmentDTO> PostEnvironment([FromBody] EnvironmentDTO value)
         {
-            _context.Environments.Add(environment);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterEnvironment(_mapper.Map<Models.Environment>(value))));
 
-            return CreatedAtAction("GetEnvironment", new { id = environment.Environment_Id }, environment);
         }
 
-        // DELETE: api/Environments/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Models.Environment>> DeleteEnvironment(int id)
-        {
-            var environment = await _context.Environments.FindAsync(id);
-            if (environment == null)
-            {
-                return NotFound();
-            }
+        //// DELETE: api/Environments/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<Models.Environment>> DeleteEnvironment(int id)
+        //{
+        //    var environment = await _context.Environments.FindAsync(id);
+        //    if (environment == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Environments.Remove(environment);
-            await _context.SaveChangesAsync();
+        //    _context.Environments.Remove(environment);
+        //    await _context.SaveChangesAsync();
 
-            return environment;
-        }
+        //    return environment;
+        //}
 
         private bool EnvironmentExists(int id)
         {
