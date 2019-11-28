@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -15,6 +18,14 @@ namespace CentralDeErros.Api.Controllers
     {
         private readonly ErrorDbContext _context;
 
+        public UsersController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration)
+        {
+            //_userManager = userManager;
+            //_signInManager = signInManager;
+            //_configuration = configuration;
+        }
         public UsersController(ErrorDbContext context)
         {
             _context = context;
