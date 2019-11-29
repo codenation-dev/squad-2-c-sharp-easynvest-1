@@ -158,6 +158,10 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("EMAIL")
                         .HasMaxLength(200);
 
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnName("EXPIRATION")
+                        .HasMaxLength(40);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("NAME")
@@ -171,7 +175,7 @@ namespace CentralDeErros.Api.Migrations
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnName("TOKEN")
-                        .HasMaxLength(40);
+                        .HasMaxLength(200);
 
                     b.HasKey("UserId");
 

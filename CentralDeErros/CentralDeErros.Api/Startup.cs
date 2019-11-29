@@ -31,22 +31,39 @@ namespace CentralDeErros.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ErrorDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ErrorDbContext>()
-                .AddDefaultTokenProviders();
+            options.UseSqlServer(Configuration.GetConnectionString("CentralDeErros")));
+
+            services.AddDefaultIdentity<IdentityUser>()
+                 .AddRoles<IdentityRole>()
+                 .AddEntityFrameworkStores<ErrorDbContext>()
+                 .AddDefaultTokenProviders();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-         options.TokenValidationParameters = new TokenValidationParameters
-         {
-             ValidateIssuer = false,
-             ValidateAudience = false,
-             ValidateLifetime = true,
-             ValidateIssuerSigningKey = true,
-             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
-             ClockSkew = TimeSpan.Zero
-         });
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<User>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret); //cria uma chave com o secret
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true, //valida o emissor 
+                    ValidateAudience = true, //valida a url
+                    ValidAudience = appSettings.ValidoEm, //informo qual é a url
+                    ValidIssuer = appSettings.Emissor //informo qual é o emissor do token
+                };
+            });
         }
 
 
@@ -58,7 +75,14 @@ namespace CentralDeErros.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
+            app.UseHttpsRedirection();
+            //TODO Usar o Identity na aplicação
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

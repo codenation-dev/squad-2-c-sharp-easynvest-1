@@ -18,14 +18,7 @@ namespace CentralDeErros.Api.Controllers
     {
         private readonly ErrorDbContext _context;
 
-        public UsersController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IConfiguration configuration)
-        {
-            //_userManager = userManager;
-            //_signInManager = signInManager;
-            //_configuration = configuration;
-        }
+       
         public UsersController(ErrorDbContext context)
         {
             _context = context;

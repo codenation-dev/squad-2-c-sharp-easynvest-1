@@ -10,11 +10,11 @@
         "projectUniqueName": "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj",
         "projectName": "CentralDeErros.Api",
         "projectPath": "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj",
-        "packagesPath": "C:\\Users\\FAMILIA EM DEUS\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\Je_Driko\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\FAMILIA EM DEUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Je_Driko\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
