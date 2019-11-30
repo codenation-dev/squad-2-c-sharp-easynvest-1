@@ -33,7 +33,7 @@ namespace CentralDeErros.Api.Models
         public int UserId { get; set; }
 
         [Column("USER_ID"), Required]
-        public User User { get; set; }// referencia 
+        public Users User { get; set; }// referencia 
 
         [ForeignKey("ERROR_ID"), Required]
         public int ErrorId { get; set; }

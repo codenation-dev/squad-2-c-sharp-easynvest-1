@@ -9,6 +9,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using CentralDeErros.Api.Models;
+using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -19,15 +21,18 @@ namespace CentralDeErros.Api.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
-        
+        private readonly AppSettings _appSettings;
+
 
         public UserTokenController(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IOptions<AppSettings> appSettings)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _appSettings = appSettings.Value;
         }
         [HttpGet]
         public ActionResult<string> Get()
@@ -35,10 +40,9 @@ namespace CentralDeErros.Api.Controllers
             return " << Controlador UserTokenController :: CentralDeErros >> ";
         }
         [HttpPost("Criar")]
-
-        public async Task<ActionResult<User>> CreateUser([FromBody] User model)
+        public async Task<ActionResult<Users>> CreateUser([FromBody] Users model)
         {
-            var user = new IdentityUser { UserName = model.Name, Email = model.Email };
+            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -49,9 +53,9 @@ namespace CentralDeErros.Api.Controllers
                 return BadRequest("Usuário ou senha inválidos");
             }
         }
-        [HttpPost("Login")]
 
-        public async Task<ActionResult<User>> Login([FromBody] User user)
+        [HttpPost("Login")]
+        public async Task<ActionResult<Users>> Login([FromBody] Users user)
         {
             var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password,
                  isPersistent: false, lockoutOnFailure: false);
@@ -66,27 +70,29 @@ namespace CentralDeErros.Api.Controllers
                 return BadRequest(ModelState);
             }
         }
-        private User BuildToken(User user)
+
+        private Users BuildToken(Users user)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
-                new Claim("meu Valor", "o que voce quiser"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+               
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:Secret"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             // tempo de expiração do token: 1 hora
             var expiration = DateTime.UtcNow.AddHours(1);
+
             JwtSecurityToken token = new JwtSecurityToken(
                issuer: null,
                audience: null,
                claims: claims,
                expires: expiration,
                signingCredentials: creds);
-            return new User()
-            {
 
+            return new Users()
+            {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };

@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using CentralDeErros.Api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +26,6 @@ namespace CentralDeErros.Api
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -38,18 +39,18 @@ namespace CentralDeErros.Api
                  .AddEntityFrameworkStores<ErrorDbContext>()
                  .AddDefaultTokenProviders();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            // pega as configurações do appsettings.json
             var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<User>(appSettingsSection);
+            services.Configure<Users>(appSettingsSection);
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret); //cria uma chave com o secret
 
-            services.AddAuthentication(x =>
+            services.AddAuthentication(x =>//autenticação faz aqui
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
             }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = true;
@@ -57,18 +58,31 @@ namespace CentralDeErros.Api
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    IssuerSigningKey = new SymmetricSecurityKey(key),//gera chave segura
                     ValidateIssuer = true, //valida o emissor 
                     ValidateAudience = true, //valida a url
-                    ValidAudience = appSettings.ValidoEm, //informo qual é a url
-                    ValidIssuer = appSettings.Emissor //informo qual é o emissor do token
+                    ValidateLifetime = true,
+                    //ValidAudience = appSettings.ValidoEm, //informo qual é a url
+                    //ValidIssuer = appSettings.Emissor //informo qual é o emissor do token
                 };
             });
+
+            services.AddAuthorization(options =>
+            {
+                //options.AddPolicy("user", policy => policy.RequireClaim("CentralDeErros", "user"));
+                //options.AddPolicy("admin", policy => policy.RequireClaim("CentralDeErros", "admin"));
+            });
+
+            services.AddMvc(//config =>
+                            //{
+                            //    var policy = new AuthorizationPolicyBuilder()
+                            //                     .RequireAuthenticatedUser()
+                            //                     .Build();
+                            //    config.Filters.Add(new AuthorizeFilter(policy));
+                            //}
+                   ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -80,11 +94,17 @@ namespace CentralDeErros.Api
                 app.UseHsts();
             }
 
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseHttpsRedirection();
             //TODO Usar o Identity na aplicação
-            app.UseAuthentication();
+            app.UseAuthentication();//usar autenticação
             app.UseMvc();
+
+            
         }
     }
 }
-

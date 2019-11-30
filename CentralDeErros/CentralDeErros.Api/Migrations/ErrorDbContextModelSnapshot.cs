@@ -146,7 +146,7 @@ namespace CentralDeErros.Api.Migrations
                     b.ToTable("SITUATION");
                 });
 
-            modelBuilder.Entity("CentralDeErros.Api.Models.User", b =>
+            modelBuilder.Entity("CentralDeErros.Api.Models.Users", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -202,7 +202,7 @@ namespace CentralDeErros.Api.Migrations
 
             modelBuilder.Entity("CentralDeErros.Api.Models.ErrorOccurrence", b =>
                 {
-                    b.HasOne("CentralDeErros.Api.Models.User", "User")
+                    b.HasOne("CentralDeErros.Api.Models.Users", "User")
                         .WithMany("ErrorOccurrences")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

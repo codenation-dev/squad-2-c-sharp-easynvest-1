@@ -9,7 +9,7 @@ namespace CentralDeErros.Api.Services
     interface IErrorOccurrenceService
     {
         // cadastra e retorna sucesso ou falha
-        bool RegisterError(Error error, User user, string origin, string details, DateTime dateTime, string userToken);
+        bool RegisterError(Error error, Users user, string origin, string details, DateTime dateTime, string userToken);
 
         // retorna a lista (detalhada) de todos os erros de um tipo de level individualmente
         List<ErrorOccurrence> ListOccurencesByLevel(int level);

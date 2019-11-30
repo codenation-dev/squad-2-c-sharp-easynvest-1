@@ -16,7 +16,7 @@ namespace CentralDeErros.Api.Services
             this._context = context;
         }
 
-        public bool RegisterError(Error error, User user, string origin, string details, DateTime dateTime, string userToken)
+        public bool RegisterError(Error error, Users user, string origin, string details, DateTime dateTime, string userToken)
         {
             _context.ErrorOccurrences.Add(new ErrorOccurrence { Error = error, User = user, Origin = origin, Details = details, DateTime = dateTime });
 
