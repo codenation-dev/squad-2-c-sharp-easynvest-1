@@ -8,9 +8,8 @@ namespace CentralDeErros.Api.DTOs
 {
     public class EnvironmentDTO
     {
-        public int EnvironmentId { get; set; }
+        public int Environment_Id { get; set; }
 
-        [Required]
         public string EnvironmentName { get; set; }
     }
 }

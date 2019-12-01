@@ -41,9 +41,9 @@
       "frameworks": {
         "netcoreapp2.2": {
           "dependencies": {
-            "AutoMapper": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
-              "version": "[9.0.0, )"
+              "version": "[7.0.0, )"
             },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",

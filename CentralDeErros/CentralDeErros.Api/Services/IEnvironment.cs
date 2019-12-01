@@ -1,4 +1,5 @@
-﻿using CentralDeErros.Api.Models;
+﻿using CentralDeErros.Api.DTOs;
+using CentralDeErros.Api.Models;
 using System;
 using System.Collections.Generic;
 

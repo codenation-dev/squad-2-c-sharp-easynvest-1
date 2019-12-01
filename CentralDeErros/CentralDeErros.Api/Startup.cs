@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CentralDeErros.Api.Models;
+﻿using CentralDeErros.Api.Models;
 using CentralDeErros.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using AutoMapper;
 
 namespace CentralDeErros.Api
 {
@@ -27,16 +20,16 @@ namespace CentralDeErros.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
+            services.AddMvcCore().AddJsonFormatters();
+
             services.AddDbContext<ErrorDbContext>();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddScoped<IEnvironment, EnvironmentService>();
             services.AddScoped<IErrorOccurrenceService, ErrorOccurrenceService>();
             services.AddScoped<IErrorService, ErrorService>();
             services.AddScoped<ILevel, LevelService>();
             services.AddScoped<ISituation, SituationService>();
-            services.AddScoped<IUserService, IUserService>();
+            services.AddScoped<IUserService, UserService>();
 
         }
 
@@ -48,7 +41,7 @@ namespace CentralDeErros.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Services
 {
-    interface IUserService
+    public interface IUserService
     {
         bool RegisterUser(string email, string password, string name);
 

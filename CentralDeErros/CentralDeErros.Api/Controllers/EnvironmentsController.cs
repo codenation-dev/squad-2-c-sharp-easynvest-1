@@ -20,17 +20,32 @@ namespace CentralDeErros.Api.Controllers
         private readonly IEnvironment _service;
         private readonly IMapper _mapper;
 
-        public EnvironmentsController(IMapper mapper, IEnvironment service)
+        public EnvironmentsController(IMapper mapper, IEnvironment service, ErrorDbContext context)
         {
             _service = service;
             _mapper = mapper;
+            _context = context;
         }
 
         // GET: api/Environments
         [HttpGet]
         public ActionResult<IEnumerable<EnvironmentDTO>> GetEnvironments()
         {
-            return Ok(_mapper.Map<EnvironmentDTO>(_service.ConsultAllEnvironments()));
+            var environments = _service.ConsultAllEnvironments();
+
+            if (environments == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                
+                List<EnvironmentDTO> teste = environments.
+                        Select(x => _mapper.Map<EnvironmentDTO>(x)).
+                        ToList();
+
+                return Ok(teste);
+            }
         }
 
         // GET: api/Environments/5
@@ -49,18 +64,16 @@ namespace CentralDeErros.Api.Controllers
 
         // PUT: api/Environments/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEnvironment(int id, Models.Environment environment)
+        public ActionResult<EnvironmentDTO> PutEnvironment(int id, Models.Environment environment)
         {
             if (id != environment.Environment_Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(environment).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterEnvironment(environment)));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,8 +86,6 @@ namespace CentralDeErros.Api.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Environments
@@ -86,22 +97,6 @@ namespace CentralDeErros.Api.Controllers
             return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterEnvironment(_mapper.Map<Models.Environment>(value))));
 
         }
-
-        //// DELETE: api/Environments/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Models.Environment>> DeleteEnvironment(int id)
-        //{
-        //    var environment = await _context.Environments.FindAsync(id);
-        //    if (environment == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Environments.Remove(environment);
-        //    await _context.SaveChangesAsync();
-
-        //    return environment;
-        //}
 
         private bool EnvironmentExists(int id)
         {
