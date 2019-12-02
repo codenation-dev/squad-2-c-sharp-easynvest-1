@@ -159,11 +159,9 @@ namespace CentralDeErros.Api.Migrations
                         .HasMaxLength(200);
 
                     b.Property<DateTime>("Expiration")
-                        .HasColumnName("EXPIRATION")
-                        .HasMaxLength(40);
+                        .HasColumnName("EXPIRATION");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnName("NAME")
                         .HasMaxLength(200);
 
@@ -173,13 +171,12 @@ namespace CentralDeErros.Api.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Token")
-                        .IsRequired()
                         .HasColumnName("TOKEN")
                         .HasMaxLength(200);
 
                     b.HasKey("UserId");
 
-                    b.ToTable("USER");
+                    b.ToTable("USERS");
                 });
 
             modelBuilder.Entity("CentralDeErros.Api.Models.Error", b =>

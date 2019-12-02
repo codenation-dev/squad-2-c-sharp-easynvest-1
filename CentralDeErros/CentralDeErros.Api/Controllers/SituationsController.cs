@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SituationsController : ControllerBase
     {
         private readonly ErrorDbContext _context;

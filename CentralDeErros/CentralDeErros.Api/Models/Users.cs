@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CentralDeErros.Api.Models
 {
-    [Table ("USER")]
+    [Table ("USERS")]
     public class Users
     {
         [Column("ID")]
@@ -15,7 +15,7 @@ namespace CentralDeErros.Api.Models
 
         [Column("NAME")]
         [StringLength(200)]
-        [Required]
+        //[Required]
         public string Name { get; set; }
 
         [Column("EMAIL")]
@@ -30,11 +30,10 @@ namespace CentralDeErros.Api.Models
 
         [Column("TOKEN")]
         [MaxLength(200)]
-        [Required]
+       // [Required]
         public string Token { get; set; }
 
         [Column("EXPIRATION")]
-        [MaxLength(40)]
         [Required]
         public DateTime Expiration { get; set; }
 

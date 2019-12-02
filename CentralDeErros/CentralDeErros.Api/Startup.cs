@@ -34,10 +34,8 @@ namespace CentralDeErros.Api
             services.AddDbContext<ErrorDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("CentralDeErros")));
 
-            services.AddDefaultIdentity<IdentityUser>()
-                 .AddRoles<IdentityRole>()
-                 .AddEntityFrameworkStores<ErrorDbContext>()
-                 .AddDefaultTokenProviders();
+            services.AddCors();
+
 
             // pega as configurações do appsettings.json
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -62,25 +60,20 @@ namespace CentralDeErros.Api
                     ValidateIssuer = true, //valida o emissor 
                     ValidateAudience = true, //valida a url
                     ValidateLifetime = true,
-                    //ValidAudience = appSettings.ValidoEm, //informo qual é a url
-                    //ValidIssuer = appSettings.Emissor //informo qual é o emissor do token
+                    ValidAudience = appSettings.ValidoEm, //informo qual é a url
+                    ValidIssuer = appSettings.Emissor, //informo qual é o emissor do token
+                    ClockSkew = TimeSpan.Zero,
                 };
             });
 
-            services.AddAuthorization(options =>
+            services.AddAuthorization(options =>//autoriza o uso do token
             {
-                //options.AddPolicy("user", policy => policy.RequireClaim("CentralDeErros", "user"));
-                //options.AddPolicy("admin", policy => policy.RequireClaim("CentralDeErros", "admin"));
+                options.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
             });
 
-            services.AddMvc(//config =>
-                            //{
-                            //    var policy = new AuthorizationPolicyBuilder()
-                            //                     .RequireAuthenticatedUser()
-                            //                     .Build();
-                            //    config.Filters.Add(new AuthorizeFilter(policy));
-                            //}
-                   ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
