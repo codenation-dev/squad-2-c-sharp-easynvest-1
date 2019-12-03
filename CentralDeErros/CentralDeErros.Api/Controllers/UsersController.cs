@@ -23,12 +23,9 @@ namespace CentralDeErros.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ErrorDbContext _context;
-        private readonly AppSettings _appSettings;
-
 
         public UsersController(IOptions<AppSettings> appSettings, ErrorDbContext context)
         {
-            _appSettings = appSettings.Value;
             _context = context;
         }
 
@@ -56,6 +53,7 @@ namespace CentralDeErros.Api.Controllers
 
         private Users BuildToken(Users user)
         {
+            _context.SaveChanges();
 
             var claims = new[]
             {
@@ -66,15 +64,15 @@ namespace CentralDeErros.Api.Controllers
 
             var key = Encoding.ASCII.GetBytes("AppSettings.Secret");
             var creds = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
-            var expiration = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras);
-            var emissor = (_appSettings.Emissor);
-            var validoEm = (_appSettings.ValidoEm);
+            var expiration = DateTime.UtcNow.AddHours(2);
+            var emissor = ("AppSettings.Emissor");
+            var validoEm = ("AppSettings.ValidoEm");
             JwtSecurityToken token = new JwtSecurityToken(
                issuer: emissor,
                audience: validoEm,
-               claims: claims,//regras
+               claims: claims,
                expires: expiration,
-               signingCredentials:creds
+               signingCredentials: creds
                );
 
             return new Users()
@@ -82,23 +80,23 @@ namespace CentralDeErros.Api.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };
+            
         }
 
 
         [HttpPost("Login")]
-        public ActionResult<Users> Login([FromBody] Users user)
+        public ActionResult<Users> Login([FromBody] Users user )
         {
-            var users = _context.Users.Where(x => x.Email == user.Email && x.Password == user.Password).FirstOrDefault();
+            var users = _context.Users.SingleOrDefault(x => x.Email == user.Email && x.Password == user.Password);
 
             if (user==null)
             {
                 ModelState.AddModelError(string.Empty, "login inválido.");
-                return BadRequest(ModelState);
-                
+                return BadRequest(ModelState);    
             }
             else
             {
-                return BuildToken(user);
+                 return BuildToken(user);
             }
           
         }

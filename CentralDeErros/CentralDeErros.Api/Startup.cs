@@ -43,10 +43,10 @@ namespace CentralDeErros.Api
             services.Configure<Users>(appSettingsSection);
 
             var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret); //cria uma chave com o secret
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
 
-            services.AddAuthentication(x =>//autenticação faz aqui
+            services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,7 +68,7 @@ namespace CentralDeErros.Api
                 };
             });
 
-            services.AddAuthorization(options =>//autoriza o uso do token
+            services.AddAuthorization(options =>
             {
                 options.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
@@ -95,8 +95,8 @@ namespace CentralDeErros.Api
                 .AllowAnyHeader());
 
             app.UseHttpsRedirection();
-            //TODO Usar o Identity na aplicação
-            app.UseAuthentication();//usar autenticação
+            
+            app.UseAuthentication();
             app.UseMvc();
 
             

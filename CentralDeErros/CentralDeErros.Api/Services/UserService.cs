@@ -1,4 +1,5 @@
 ﻿using CentralDeErros.Api.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,19 +33,20 @@ namespace CentralDeErros.Api.Services
 
         public bool Login(string email, string password)
         {
-            // método para se pensar 
-            // aqui deve permitir a autenticação do usuário para utilizar a api que criarmos
+            
+             _context.Users.SingleOrDefault(x => x.Email == email && x.Password == password);
 
-            var user = _context.Users.Where(x => x.Email == email && x.Password == password)
-                 .FirstOrDefault();
-
-            if (user == null)
+            if (_context.Users.FirstOrDefault(x => x.Email == email && x.Password == password)!=null)
             {
-                //return null;
+                return true;
             }
+            else
+            {
 
+                return false;
 
-            throw new NotImplementedException();
+            }
+            
 
         }
     }
