@@ -87,7 +87,7 @@ namespace CentralDeErros.Api.Controllers
         [HttpPost("Login")]
         public ActionResult<Users> Login([FromBody] Users user )
         {
-            var users = _context.Users.SingleOrDefault(x => x.Email == user.Email && x.Password == user.Password);
+            _context.Users.SingleOrDefault(x => x.Email == user.Email && x.Password == user.Password);
 
             if (user==null)
             {
