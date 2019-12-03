@@ -100,6 +100,7 @@ namespace CentralDeErros.Api.Controllers
             {
                 return BuildToken(user);
             }
+          
         }
 
         
