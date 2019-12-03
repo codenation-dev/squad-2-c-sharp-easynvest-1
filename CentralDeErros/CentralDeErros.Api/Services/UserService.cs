@@ -43,25 +43,6 @@ namespace CentralDeErros.Api.Services
                 //return null;
             }
 
-            //var tokenHandler = new JwtSecurityTokenHandler();
-            //var key = Encoding.ASCII.GetBytes(Settings.Secret);
-            //var tokenDescriptor = new SecurityTokenDescriptor
-            //{
-            //    Subject = new ClaimsIdentity(new Claim[]
-            //    {
-            //        new Claim(ClaimTypes.Name, user.Username),
-            //        new Claim("Store", user.Role)
-            //    }),
-            //    Expires = DateTime.UtcNow.AddDays(7),
-            //    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            //};
-            //var token = tokenHandler.CreateToken(tokenDescriptor);
-            //user.Token = tokenHandler.WriteToken(token);
-
-            //user.Password = null;
-
-            //return user;
-
 
             throw new NotImplementedException();
 

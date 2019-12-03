@@ -35,6 +35,7 @@ namespace CentralDeErros.Api
             options.UseSqlServer(Configuration.GetConnectionString("CentralDeErros")));
 
             services.AddCors();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             // pega as configurações do appsettings.json
@@ -43,6 +44,7 @@ namespace CentralDeErros.Api
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret); //cria uma chave com o secret
+
 
             services.AddAuthentication(x =>//autenticação faz aqui
             {
@@ -73,7 +75,7 @@ namespace CentralDeErros.Api
                     .RequireAuthenticatedUser().Build());
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

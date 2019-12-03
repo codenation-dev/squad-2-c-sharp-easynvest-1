@@ -30,7 +30,7 @@ namespace CentralDeErros.Api.Models
 
         [Column("TOKEN")]
         [MaxLength(200)]
-       // [Required]
+        //[Required]
         public string Token { get; set; }
 
         [Column("EXPIRATION")]

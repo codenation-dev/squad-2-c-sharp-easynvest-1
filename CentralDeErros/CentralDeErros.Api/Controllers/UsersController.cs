@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
 using System.IdentityModel.Tokens.Jwt;
-//using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
@@ -23,16 +23,11 @@ namespace CentralDeErros.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ErrorDbContext _context;
-        //private readonly SignInManager<IdentityUser> _signInManager;
-        //private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
 
-        public SigningCredentials SigningCredentials { get; private set; }
 
         public UsersController(IOptions<AppSettings> appSettings, ErrorDbContext context)
         {
-            // _signInManager = signInManager;
-            //_userManager = userManager;
             _appSettings = appSettings.Value;
             _context = context;
         }
@@ -59,7 +54,6 @@ namespace CentralDeErros.Api.Controllers
             return user;
         }
 
-        //[HttpPost("Token")]
         private Users BuildToken(Users user)
         {
 
@@ -70,10 +64,9 @@ namespace CentralDeErros.Api.Controllers
 
             };
 
-           // var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.Secret));
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
-            var expiration = DateTime.UtcNow.AddHours(2);
+            var key = Encoding.ASCII.GetBytes("AppSettings.Secret");
+            var creds = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
+            var expiration = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras);
             var emissor = (_appSettings.Emissor);
             var validoEm = (_appSettings.ValidoEm);
             JwtSecurityToken token = new JwtSecurityToken(
@@ -81,9 +74,8 @@ namespace CentralDeErros.Api.Controllers
                audience: validoEm,
                claims: claims,//regras
                expires: expiration,
-               signingCredentials: SigningCredentials
+               signingCredentials:creds
                );
-
 
             return new Users()
             {
@@ -93,29 +85,10 @@ namespace CentralDeErros.Api.Controllers
         }
 
 
-        //[HttpPost("Criar")]
-        //public ActionResult<Users> CreateUser([FromBody] Users model)
-        //{
-        //    //var user = new IdentityUser { UserName = model.Email, Email = model.Email };
-        //    var user = _context.Users.SingleOrDefault(x => x.Email == model.Email && x.Password == model.Password);
-        //    //var result = await _userManager.CreateAsync(user, model.Password);
-        //    if (user==null) //result.Succeeded
-        //    {
-        //        return BuildToken(model);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("Usuário ou senha inválidos");
-        //    }
-
-        //}
-
         [HttpPost("Login")]
         public ActionResult<Users> Login([FromBody] Users user)
         {
             var users = _context.Users.Where(x => x.Email == user.Email && x.Password == user.Password).FirstOrDefault();
-            //var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password,
-                 //isPersistent: false, lockoutOnFailure: false);
 
             if (user==null)
             {
