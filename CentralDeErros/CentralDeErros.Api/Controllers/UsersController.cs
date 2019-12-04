@@ -68,7 +68,7 @@ namespace CentralDeErros.Api.Controllers
                     
                    
                 }),
-               // Expires = DateTime.UtcNow.AddHours(2)
+                Expires = DateTime.UtcNow.AddHours(2)
                 
             };
 
