@@ -24,7 +24,7 @@ namespace CentralDeErros.Api.Controllers
     {
         private readonly ErrorDbContext _context;
 
-        public UsersController(IOptions<AppSettings> appSettings, ErrorDbContext context)
+        public UsersController(ErrorDbContext context)
         {
             _context = context;
         }
@@ -51,57 +51,61 @@ namespace CentralDeErros.Api.Controllers
             return user;
         }
 
-        private Users BuildToken(Users user)
+       
+        
+        public Users BuildToken(Users user)
         {
-            _context.SaveChanges();
-
-            var claims = new[]
+    
+            var key = Encoding.ASCII.GetBytes("AppSettings.Secret");
+            var TokenHandler = new JwtSecurityTokenHandler();
+            var TokenDescriptor = new SecurityTokenDescriptor
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    
+                   
+                }),
+               // Expires = DateTime.UtcNow.AddHours(2)
+                
             };
 
-            var key = Encoding.ASCII.GetBytes("AppSettings.Secret");
-            var creds = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
+            var token = TokenHandler.CreateToken(TokenDescriptor);
+            user.Token = TokenHandler.WriteToken(token);
             var expiration = DateTime.UtcNow.AddHours(2);
             var emissor = ("AppSettings.Emissor");
             var validoEm = ("AppSettings.ValidoEm");
-            JwtSecurityToken token = new JwtSecurityToken(
+            JwtSecurityToken tks = new JwtSecurityToken(
                issuer: emissor,
-               audience: validoEm,
-               claims: claims,
-               expires: expiration,
-               signingCredentials: creds
+               audience: validoEm
                );
+       
+            user.Expiration = expiration;
+            return user;
 
-            return new Users()
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
-            };
-            
         }
 
 
         [HttpPost("Login")]
-        public ActionResult<Users> Login([FromBody] Users user )
+        public ActionResult<Users> Login([FromBody] Users user)
         {
-            _context.Users.SingleOrDefault(x => x.Email == user.Email && x.Password == user.Password);
+            var users = _context.Users.Where(x => x.Email == user.Email && x.Password == user.Password).FirstOrDefault();
 
-            if (user==null)
+            if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "login inválido.");
-                return BadRequest(ModelState);    
+                return BadRequest(ModelState);
             }
             else
             {
-                 return BuildToken(user);
+                return BuildToken(user);
             }
-          
+
         }
 
-        
+
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, Users user)
