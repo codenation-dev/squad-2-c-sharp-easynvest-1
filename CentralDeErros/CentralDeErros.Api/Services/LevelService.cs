@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CentralDeErros.Api.Interfaces;
 using CentralDeErros.Api.Models;
 
 namespace CentralDeErros.Api.Services
@@ -15,7 +16,7 @@ namespace CentralDeErros.Api.Services
             this._context = context;
         }
 
-        public bool RegisterLevel(string name)
+        public Level RegisterLevel(Level level)
         {
             _context.Levels.Add(new Level { LevelName = name });
 

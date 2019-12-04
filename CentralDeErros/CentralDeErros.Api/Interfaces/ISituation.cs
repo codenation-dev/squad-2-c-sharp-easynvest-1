@@ -1,8 +1,7 @@
 ﻿using CentralDeErros.Api.Models;
-using System;
 using System.Collections.Generic;
 
-namespace CentralDeErros.Api.Services
+namespace CentralDeErros.Api.Interfaces
 {
     interface ISituation
     {

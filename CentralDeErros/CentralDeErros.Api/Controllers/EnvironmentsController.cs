@@ -9,6 +9,7 @@ using CentralDeErros.Api.Models;
 using CentralDeErros.Api.Services;
 using CentralDeErros.Api.DTOs;
 using AutoMapper;
+using CentralDeErros.Api.Interfaces;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -16,15 +17,13 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class EnvironmentsController : ControllerBase
     {
-        private readonly ErrorDbContext _context;
         private readonly IEnvironment _service;
         private readonly IMapper _mapper;
 
-        public EnvironmentsController(IMapper mapper, IEnvironment service, ErrorDbContext context)
+        public EnvironmentsController(IEnvironment service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
-            _context = context;
         }
 
         // GET: api/Environments
@@ -39,12 +38,9 @@ namespace CentralDeErros.Api.Controllers
             }
             else
             {
-                
-                List<EnvironmentDTO> teste = environments.
+                return Ok(environments.
                         Select(x => _mapper.Map<EnvironmentDTO>(x)).
-                        ToList();
-
-                return Ok(teste);
+                        ToList());
             }
         }
 
@@ -73,11 +69,11 @@ namespace CentralDeErros.Api.Controllers
 
             try
             {
-                return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterEnvironment(environment)));
+                return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterOrUpdateEnvironment(environment)));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EnvironmentExists(id))
+                if (!_service.EnvironmentExists(id))
                 {
                     return NotFound();
                 }
@@ -94,13 +90,8 @@ namespace CentralDeErros.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterEnvironment(_mapper.Map<Models.Environment>(value))));
+            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterOrUpdateEnvironment(_mapper.Map<Models.Environment>(value))));
 
-        }
-
-        private bool EnvironmentExists(int id)
-        {
-            return _context.Environments.Any(e => e.Environment_Id == id);
         }
     }
 }

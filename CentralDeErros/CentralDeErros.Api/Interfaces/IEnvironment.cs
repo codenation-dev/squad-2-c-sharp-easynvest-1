@@ -1,16 +1,16 @@
-﻿using CentralDeErros.Api.DTOs;
-using CentralDeErros.Api.Models;
-using System;
+﻿using CentralDeErros.Api.Models;
 using System.Collections.Generic;
 
-namespace CentralDeErros.Api.Services
+namespace CentralDeErros.Api.Interfaces
 {
     public interface IEnvironment
     {
-        Models.Environment RegisterEnvironment (Models.Environment environment);
+        Environment RegisterOrUpdateEnvironment (Environment environment);
 
-        Models.Environment ConsultEnvironment(int id);
+        Environment ConsultEnvironment(int id);
 
-        List<Models.Environment> ConsultAllEnvironments();
+        List<Environment> ConsultAllEnvironments();
+
+        bool EnvironmentExists(int id);
     }
 }
