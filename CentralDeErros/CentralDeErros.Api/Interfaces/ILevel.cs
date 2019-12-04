@@ -10,5 +10,7 @@ namespace CentralDeErros.Api.Interfaces
         Level ConsultLevel(int id);
 
         List<Level> ConsultAllLevels();
+
+        bool LevelExists(int id);
     }
 }

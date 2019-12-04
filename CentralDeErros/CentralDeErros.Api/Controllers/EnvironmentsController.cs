@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CentralDeErros.Api.Models;
-using CentralDeErros.Api.Services;
 using CentralDeErros.Api.DTOs;
 using AutoMapper;
 using CentralDeErros.Api.Interfaces;
+using CentralDeErros.Api.Models;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -20,7 +16,7 @@ namespace CentralDeErros.Api.Controllers
         private readonly IEnvironment _service;
         private readonly IMapper _mapper;
 
-        public EnvironmentsController(IEnvironment service, IMapper mapper)
+        private EnvironmentsController(IEnvironment service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
@@ -60,9 +56,9 @@ namespace CentralDeErros.Api.Controllers
 
         // PUT: api/Environments/5
         [HttpPut("{id}")]
-        public ActionResult<EnvironmentDTO> PutEnvironment(int id, Models.Environment environment)
+        public ActionResult<EnvironmentDTO> PutEnvironment(int id, Environment environment)
         {
-            if (id != environment.Environment_Id)
+            if (id != environment.EnvironmentId)
             {
                 return BadRequest();
             }
@@ -90,8 +86,7 @@ namespace CentralDeErros.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterOrUpdateEnvironment(_mapper.Map<Models.Environment>(value))));
-
+            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterOrUpdateEnvironment(_mapper.Map<Environment>(value))));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace CentralDeErros.Api.Services
 
         public Environment RegisterOrUpdateEnvironment(Environment environment)
         {
-            var state = environment.Environment_Id == 0 ? EntityState.Added : EntityState.Modified;
+            var state = environment.EnvironmentId == 0 ? EntityState.Added : EntityState.Modified;
             _context.Entry(environment).State = state;
             _context.SaveChanges();
             return environment;
@@ -35,7 +35,7 @@ namespace CentralDeErros.Api.Services
 
         public bool EnvironmentExists(int id)
         {
-            return _context.Environments.Any(e => e.Environment_Id == id);
+            return _context.Environments.Any(e => e.EnvironmentId == id);
         }
     }
 }

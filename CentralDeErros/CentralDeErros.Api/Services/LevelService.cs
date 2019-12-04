@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CentralDeErros.Api.Interfaces;
 using CentralDeErros.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CentralDeErros.Api.Services
 {
@@ -16,16 +15,12 @@ namespace CentralDeErros.Api.Services
             this._context = context;
         }
 
-        public Level RegisterLevel(Level level)
+        public Level RegisterOrUpdateLevel(Level level)
         {
-            _context.Levels.Add(new Level { LevelName = name });
-
-            if (_context.Levels.FirstOrDefault(l => l.LevelName == name) != null)
-            {
-                return true;
-            }
-
-            return false;
+            var state = level.LevelId == 0 ? EntityState.Added : EntityState.Modified;
+            _context.Entry(level).State = state;
+            _context.SaveChanges();
+            return level;
         }
 
         public Level ConsultLevel(int id)
@@ -36,6 +31,11 @@ namespace CentralDeErros.Api.Services
         public List<Level> ConsultAllLevels()
         {
             return _context.Levels.Select(l => l).ToList();
+        }
+
+        public bool LevelExists(int id)
+        {
+            return _context.Levels.Any(e => e.LevelId == id);
         }
     }
 }
