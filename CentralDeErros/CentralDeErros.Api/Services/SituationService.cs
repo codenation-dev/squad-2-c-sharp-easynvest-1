@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CentralDeErros.Api.Interfaces;
 using CentralDeErros.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CentralDeErros.Api.Services
 {
@@ -10,19 +12,15 @@ namespace CentralDeErros.Api.Services
 
         public SituationService(ErrorDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
-        public bool RegisterSituation(string name)
+        public Situation RegisterOrUpdateSituation(Situation situation)
         {
-            _context.Situations.Add(new Situation { SituationName = name });
-
-            if (_context.Situations.FirstOrDefault(s => s.SituationName == name) != null)
-            {
-                return true;
-            }
-
-            return false;
+            var state = situation.SituationId == 0 ? EntityState.Added : EntityState.Modified;
+            _context.Entry(situation).State = state;
+            _context.SaveChanges();
+            return situation;
         }
 
         public Situation ConsultSituation(int id)
@@ -33,6 +31,11 @@ namespace CentralDeErros.Api.Services
         public List<Situation> ConsultAllSituations()
         {
             return _context.Situations.Select(s => s).ToList();
+        }
+
+        public bool SituationExists(int id)
+        {
+            return _context.Situations.Any(e => e.SituationId == id);
         }
     }
 }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 
 namespace CentralDeErros.Api.Interfaces
 {
-    interface ISituation
+    public interface ISituation
     {
-        bool RegisterSituation(string name);
+        Situation RegisterOrUpdateSituation(Situation situation);
 
         Situation ConsultSituation(int id);
 
         List<Situation> ConsultAllSituations();
+
+        bool SituationExists(int id);
     }
 }

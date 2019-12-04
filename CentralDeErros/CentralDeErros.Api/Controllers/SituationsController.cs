@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
+using CentralDeErros.Api.Interfaces;
+using AutoMapper;
+using CentralDeErros.Api.DTOs;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -13,52 +13,63 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class SituationsController : ControllerBase
     {
-        private readonly ErrorDbContext _context;
+        private readonly ISituation _service;
+        private readonly IMapper _mapper;
 
-        public SituationsController(ErrorDbContext context)
+        public SituationsController(ISituation service, IMapper mapper)
         {
-            _context = context;
+            _service = service;
+            _mapper = mapper;
         }
 
         // GET: api/Situations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Situation>>> GetSituations()
+        public ActionResult<IEnumerable<Situation>> GetSituations()
         {
-            return await _context.Situations.ToListAsync();
+            var situations = _service.ConsultAllSituations();
+
+            if (situations == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(situations.
+                        Select(x => _mapper.Map<SituationDTO>(x)).
+                        ToList());
+            }
         }
 
         // GET: api/Situations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Situation>> GetSituation(int id)
+        public ActionResult<Situation> GetSituation(int id)
         {
-            var situation = await _context.Situations.FindAsync(id);
+            var situation = _service.ConsultSituation(id);
 
             if (situation == null)
             {
                 return NotFound();
             }
 
-            return situation;
+            return Ok(_mapper.Map<SituationDTO>(situation));
         }
 
         // PUT: api/Situations/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSituation(int id, Situation situation)
+        public ActionResult<SituationDTO> PutSituation(int id, Situation situation)
         {
             if (id != situation.SituationId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(situation).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                return Ok(_mapper.Map<LevelDTO>(_service.RegisterOrUpdateSituation(situation)));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SituationExists(id))
+                if (!_service.SituationExists(id))
                 {
                     return NotFound();
                 }
@@ -67,39 +78,15 @@ namespace CentralDeErros.Api.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Situations
         [HttpPost]
-        public async Task<ActionResult<Situation>> PostSituation(Situation situation)
+        public ActionResult<Situation> PostSituation([FromBody] SituationDTO value)
         {
-            _context.Situations.Add(situation);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSituation", new { id = situation.SituationId }, situation);
-        }
-
-        // DELETE: api/Situations/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Situation>> DeleteSituation(int id)
-        {
-            var situation = await _context.Situations.FindAsync(id);
-            if (situation == null)
-            {
-                return NotFound();
-            }
-
-            _context.Situations.Remove(situation);
-            await _context.SaveChangesAsync();
-
-            return situation;
-        }
-
-        private bool SituationExists(int id)
-        {
-            return _context.Situations.Any(e => e.SituationId == id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterOrUpdateSituation(_mapper.Map<Situation>(value))));
         }
     }
 }

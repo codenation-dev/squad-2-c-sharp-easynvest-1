@@ -1,6 +1,6 @@
 ﻿namespace CentralDeErros.Api.Interfaces
 {
-    public interface IUserService
+    public interface IUser
     {
         bool RegisterUser(string email, string password, string name);
 

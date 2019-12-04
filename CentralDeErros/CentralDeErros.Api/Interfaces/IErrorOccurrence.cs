@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CentralDeErros.Api.Interfaces
 {
-    interface IErrorOccurrenceService
+    interface IErrorOccurrence
     {
         // cadastra e retorna sucesso ou falha
         bool RegisterError(Error error, User user, string origin, string details, DateTime dateTime, string userToken);

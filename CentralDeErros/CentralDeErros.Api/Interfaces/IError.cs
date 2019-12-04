@@ -2,7 +2,7 @@
 
 namespace CentralDeErros.Api.Interfaces
 {
-    interface IErrorService
+    interface IError
     {
         bool RegisterError(int environmentId, int levelId, int situationId, string title);
         Error ConsultError(int id);
