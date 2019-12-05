@@ -1,10 +1,16 @@
 ﻿using CentralDeErros.Api.Models;
+using System.Collections.Generic;
 
 namespace CentralDeErros.Api.Interfaces
 {
-    interface IError
+    public interface IError
     {
-        bool RegisterError(int environmentId, int levelId, int situationId, string title);
+        Error RegisterOrUpdateError(Error error, int environmentId, int levelId);
+
         Error ConsultError(int id);
+
+        List<Error> ConsultAllErrors();
+
+        bool ErrorExists(int id);
     }
 }

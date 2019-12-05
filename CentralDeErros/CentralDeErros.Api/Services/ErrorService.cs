@@ -1,11 +1,13 @@
-﻿using CentralDeErros.Api.Models;
+﻿using CentralDeErros.Api.Interfaces;
+using CentralDeErros.Api.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CentralDeErros.Api.Services
 {
-    public class ErrorService : IErrorService
+    public class ErrorService : IError
     {
-
         private ErrorDbContext _context;
 
         public ErrorService(ErrorDbContext context)
@@ -13,16 +15,16 @@ namespace CentralDeErros.Api.Services
             this._context = context;
         }
 
-        public bool RegisterError(int environmentId, int levelId, int situationId, string title)
+        public Error RegisterOrUpdateError(Error error, int environmentId, int levelId)
         {
-            _context.Errors.Add(new Error { EnvironmentId = environmentId, LevelId = levelId, SituationId = situationId, Title = title });
-
-            if (_context.Errors.FirstOrDefault(e => e.EnvironmentId == environmentId && e.LevelId == levelId && e.SituationId == situationId && e.Title == title) != null)
+            if (_context.Environments.Any(e => e.EnvironmentId == environmentId) &&
+                _context.Levels.Any(l => l.LevelId == levelId))
             {
-                return true;
-            }
-
-            return false;
+                var state = error.ErrorId == 0 ? EntityState.Added : EntityState.Modified;
+                _context.Entry(error).State = state;
+                _context.SaveChanges();
+            }           
+            return error;
         }
 
         public Error ConsultError(int id)
@@ -30,5 +32,14 @@ namespace CentralDeErros.Api.Services
             return _context.Errors.Find(id);
         }
 
+        public List<Error> ConsultAllErrors()
+        {
+            return _context.Errors.Select(e => e).ToList();
+        }
+
+        public bool ErrorExists(int id)
+        {
+            return _context.Errors.Any(e => e.ErrorId == id);
+        }
     }
 }

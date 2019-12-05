@@ -40,5 +40,11 @@ namespace CentralDeErros.Api.Models
 
         [Column("ERROR_ID"), Required]
         public Error Error { get; set; }// referencia 
+
+        [ForeignKey("SITUATION_ID"), Required]
+        public int SituationId { get; set; }
+
+        [Column("SITUATION_ID"), Required]
+        public Situation Situation { get; set; }// referencia 
     }
 }
