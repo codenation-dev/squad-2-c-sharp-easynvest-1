@@ -15,7 +15,7 @@ namespace CentralDeErros.Api.Models
 
         [Column("NAME")]
         [StringLength(200)]
-        //[Required]
+        [Required]
         public string Name { get; set; }
 
         [Column("EMAIL")]
@@ -29,7 +29,7 @@ namespace CentralDeErros.Api.Models
         public string Password { get; set; }
 
         [Column("TOKEN")]
-        [MaxLength(200)]
+        [MaxLength(400)]
         //[Required]
         public string Token { get; set; }
 

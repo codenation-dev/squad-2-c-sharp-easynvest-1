@@ -6,20 +6,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+
+
 using Microsoft.AspNetCore.Authorization;
 
 namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ErrorDbContext _context;
@@ -51,61 +46,7 @@ namespace CentralDeErros.Api.Controllers
             return user;
         }
 
-       
         
-        public Users BuildToken(Users user)
-        {
-    
-            var key = Encoding.ASCII.GetBytes("AppSettings.Secret");
-            var TokenHandler = new JwtSecurityTokenHandler();
-            var TokenDescriptor = new SecurityTokenDescriptor
-            {
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    
-                   
-                }),
-                Expires = DateTime.UtcNow.AddHours(2)
-                
-            };
-
-            var token = TokenHandler.CreateToken(TokenDescriptor);
-            user.Token = TokenHandler.WriteToken(token);
-            var expiration = DateTime.UtcNow.AddHours(2);
-            var emissor = ("AppSettings.Emissor");
-            var validoEm = ("AppSettings.ValidoEm");
-            JwtSecurityToken tks = new JwtSecurityToken(
-               issuer: emissor,
-               audience: validoEm
-               );
-       
-            user.Expiration = expiration;
-            return user;
-
-        }
-
-
-        [HttpPost("Login")]
-        public ActionResult<Users> Login([FromBody] Users user)
-        {
-            var users = _context.Users.Where(x => x.Email == user.Email && x.Password == user.Password).FirstOrDefault();
-
-            if (user == null)
-            {
-                ModelState.AddModelError(string.Empty, "login inválido.");
-                return BadRequest(ModelState);
-            }
-            else
-            {
-                return BuildToken(user);
-            }
-
-        }
-
-
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, Users user)

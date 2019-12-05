@@ -162,6 +162,7 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("EXPIRATION");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("NAME")
                         .HasMaxLength(200);
 
@@ -172,7 +173,7 @@ namespace CentralDeErros.Api.Migrations
 
                     b.Property<string>("Token")
                         .HasColumnName("TOKEN")
-                        .HasMaxLength(200);
+                        .HasMaxLength(400);
 
                     b.HasKey("UserId");
 

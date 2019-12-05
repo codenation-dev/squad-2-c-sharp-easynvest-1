@@ -12,7 +12,7 @@ namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ErrorsController : ControllerBase
     {
         private readonly ErrorDbContext _context;
