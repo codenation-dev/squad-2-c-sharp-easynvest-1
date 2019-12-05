@@ -68,12 +68,12 @@ namespace CentralDeErros.Api
                 };
             });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser().Build());
-            });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+            //        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+            //        .RequireAuthenticatedUser().Build());
+            //});
 
 
         }

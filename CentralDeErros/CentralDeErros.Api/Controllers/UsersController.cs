@@ -9,6 +9,7 @@ using CentralDeErros.Api.Models;
 
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CentralDeErros.Api.Controllers
 {

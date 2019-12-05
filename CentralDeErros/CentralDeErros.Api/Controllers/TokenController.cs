@@ -19,6 +19,7 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
+
         private readonly ErrorDbContext _context;
 
         public TokenController(ErrorDbContext context)
@@ -26,8 +27,6 @@ namespace CentralDeErros.Api.Controllers
             _context = context;
 
         }
-
-        
 
         [AllowAnonymous]//qualquer user acesse este método
         [HttpPost]
@@ -62,14 +61,13 @@ namespace CentralDeErros.Api.Controllers
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     Expiration = exp
 
-            });
-                
+                });
+
             }
-            //return RequestTokenSave(requestUser);
 
             return BadRequest("Credenciais Inválidas");
 
-            
+
         }
 
         public Users RequestTokenSave(Users requestUser)
@@ -92,7 +90,6 @@ namespace CentralDeErros.Api.Controllers
             }
             return requestUser;
         }
-
 
     }
 }
