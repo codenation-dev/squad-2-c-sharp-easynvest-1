@@ -31,16 +31,4 @@ C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\D
 C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.dll
 C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.pdb
 C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\bin\Debug\netcoreapp2.2\CentralDeErros.Api.Views.dll
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\bin\Debug\netcoreapp2.2\CentralDeErros.Api.Views.pdb
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.TagHelpers.input.cache
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.TagHelpers.output.cache
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.RazorCoreGenerate.cache
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\Razor\Views\Environments\Create.cshtml.g.cs
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\Razor\Views\Environments\Delete.cshtml.g.cs
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\Razor\Views\Environments\Details.cshtml.g.cs
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\Razor\Views\Environments\Edit.cshtml.g.cs
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\Razor\Views\Environments\Index.cshtml.g.cs
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.RazorTargetAssemblyInfo.cs
-C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.Views.pdb
 C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.csproj.CopyComplete

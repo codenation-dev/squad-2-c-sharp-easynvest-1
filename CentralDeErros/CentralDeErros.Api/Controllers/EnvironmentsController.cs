@@ -16,7 +16,7 @@ namespace CentralDeErros.Api.Controllers
         private readonly IEnvironment _service;
         private readonly IMapper _mapper;
 
-        private EnvironmentsController(IEnvironment service, IMapper mapper)
+        public EnvironmentsController(IEnvironment service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;

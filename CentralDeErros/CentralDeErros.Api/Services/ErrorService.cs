@@ -15,10 +15,10 @@ namespace CentralDeErros.Api.Services
             this._context = context;
         }
 
-        public Error RegisterOrUpdateError(Error error, int environmentId, int levelId)
+        public Error RegisterOrUpdateError(Error error)
         {
-            if (_context.Environments.Any(e => e.EnvironmentId == environmentId) &&
-                _context.Levels.Any(l => l.LevelId == levelId))
+            if (_context.Environments.Any(e => e.EnvironmentId == error.EnvironmentId) &&
+                _context.Levels.Any(l => l.LevelId == error.LevelId))
             {
                 var state = error.ErrorId == 0 ? EntityState.Added : EntityState.Modified;
                 _context.Entry(error).State = state;

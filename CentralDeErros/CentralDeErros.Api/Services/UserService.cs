@@ -1,10 +1,11 @@
-﻿using CentralDeErros.Api.Models;
+﻿using CentralDeErros.Api.Interfaces;
+using CentralDeErros.Api.Models;
 using System;
 using System.Linq;
 
 namespace CentralDeErros.Api.Services
 {
-    public class UserService : IUserService
+    public class UserService : IUser
     {
         private ErrorDbContext _context;
 

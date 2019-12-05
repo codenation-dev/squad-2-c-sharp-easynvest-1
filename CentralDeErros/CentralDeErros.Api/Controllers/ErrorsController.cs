@@ -56,7 +56,7 @@ namespace CentralDeErros.Api.Controllers
 
         // PUT: api/Errors/5
         [HttpPut("{id}")]
-        public ActionResult<ErrorDTO> PutError(int id, Error error, int environmentId, int levelId, int situationId)
+        public ActionResult<ErrorDTO> PutError(int id, Error error)
         {
             if (id != error.ErrorId)
             {
@@ -65,7 +65,7 @@ namespace CentralDeErros.Api.Controllers
 
             try
             {
-                return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateError(error, environmentId, levelId)));
+                return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateError(error)));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -86,7 +86,7 @@ namespace CentralDeErros.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateError(_mapper.Map<Error>(value), value.EnvironmentId, value.LevelId)));
+            return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateError(_mapper.Map<Error>(value))));
         }
     }
 }

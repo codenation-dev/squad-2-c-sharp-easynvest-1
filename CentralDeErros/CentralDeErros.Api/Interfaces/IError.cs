@@ -5,7 +5,7 @@ namespace CentralDeErros.Api.Interfaces
 {
     public interface IError
     {
-        Error RegisterOrUpdateError(Error error, int environmentId, int levelId);
+        Error RegisterOrUpdateError(Error error);
 
         Error ConsultError(int id);
 

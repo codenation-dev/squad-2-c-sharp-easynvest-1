@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
+using CentralDeErros.Api.Interfaces;
+using AutoMapper;
+using CentralDeErros.Api.DTOs;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -13,52 +16,63 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class ErrorOccurrencesController : ControllerBase
     {
-        private readonly ErrorDbContext _context;
+        private readonly IErrorOccurrence _service;
+        private readonly IMapper _mapper;
 
-        public ErrorOccurrencesController(ErrorDbContext context)
+        private ErrorOccurrencesController(IErrorOccurrence service, IMapper mapper)
         {
-            _context = context;
+            _service = service;
+            _mapper = mapper;
         }
 
         // GET: api/ErrorOccurrences
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ErrorOccurrence>>> GetErrorOccurrences()
+        public ActionResult<IEnumerable<ErrorOccurrenceDTO>> GetErrorOccurrences()
         {
-            return await _context.ErrorOccurrences.ToListAsync();
-        }
+            var errorOccurrences = _service.ListOccurencesByLevel(1);
 
-        // GET: api/ErrorOccurrences/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ErrorOccurrence>> GetErrorOccurrence(int id)
-        {
-            var errorOccurrence = await _context.ErrorOccurrences.FindAsync(id);
-
-            if (errorOccurrence == null)
+            if (errorOccurrences == null)
             {
                 return NotFound();
             }
-
-            return errorOccurrence;
+            else
+            {
+                return Ok(errorOccurrences.
+                        Select(x => _mapper.Map<ErrorOccurrenceDTO>(x)).
+                        ToList());
+            }
         }
+
+        // GET: api/ErrorOccurrences/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<ErrorOccurrence>> GetErrorOccurrence(int id)
+        //{
+        //    var errorOccurrence = await _context.ErrorOccurrences.FindAsync(id);
+
+        //    if (errorOccurrence == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return errorOccurrence;
+        //}
 
         // PUT: api/ErrorOccurrences/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutErrorOccurrence(int id, ErrorOccurrence errorOccurrence)
+        public ActionResult<ErrorOccurrenceDTO> PutErrorOccurrence(int id, ErrorOccurrence errorOccurrence)
         {
             if (id != errorOccurrence.ErrorOccurrenceId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(errorOccurrence).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateErrorOccurrence(errorOccurrence)));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ErrorOccurrenceExists(id))
+                if (!_service.ErrorOccurrenceExists(id))
                 {
                     return NotFound();
                 }
@@ -67,39 +81,15 @@ namespace CentralDeErros.Api.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/ErrorOccurrences
         [HttpPost]
-        public async Task<ActionResult<ErrorOccurrence>> PostErrorOccurrence(ErrorOccurrence errorOccurrence)
+        public ActionResult<ErrorOccurrence> PostErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
         {
-            _context.ErrorOccurrences.Add(errorOccurrence);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetErrorOccurrence", new { id = errorOccurrence.ErrorOccurrenceId }, errorOccurrence);
-        }
-
-        // DELETE: api/ErrorOccurrences/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ErrorOccurrence>> DeleteErrorOccurrence(int id)
-        {
-            var errorOccurrence = await _context.ErrorOccurrences.FindAsync(id);
-            if (errorOccurrence == null)
-            {
-                return NotFound();
-            }
-
-            _context.ErrorOccurrences.Remove(errorOccurrence);
-            await _context.SaveChangesAsync();
-
-            return errorOccurrence;
-        }
-
-        private bool ErrorOccurrenceExists(int id)
-        {
-            return _context.ErrorOccurrences.Any(e => e.ErrorOccurrenceId == id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.RegisterOrUpdateErrorOccurrence(_mapper.Map<ErrorOccurrence>(value))));
         }
     }
 }

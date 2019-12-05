@@ -20,11 +20,10 @@ namespace CentralDeErros.Api.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasMany(u => u.ErrorOccurrences).WithOne(u => u.User).IsRequired();
-            modelBuilder.Entity<Situation>().HasMany(s => s.Errors).WithOne(s => s.Situation).IsRequired();
+            modelBuilder.Entity<Situation>().HasMany(s => s.ErrorOccurrences).WithOne(s => s.Situation).IsRequired();
             modelBuilder.Entity<Level>().HasMany(l => l.Errors).WithOne(l => l.Level).IsRequired();
             modelBuilder.Entity<Environment>().HasMany(e => e.Errors).WithOne(e => e.Environment).IsRequired();
-            modelBuilder.Entity<Error>().HasKey(e => new { e.SituationId, e.EnvironmentId, e.LevelId });//chave composta
-
+            modelBuilder.Entity<Error>().HasKey(e => new { e.EnvironmentId, e.LevelId });//chave composta
         }
 
 

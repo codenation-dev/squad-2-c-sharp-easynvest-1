@@ -6,8 +6,7 @@ namespace CentralDeErros.Api.Interfaces
 {
     interface IErrorOccurrence
     {
-        // cadastra e retorna sucesso ou falha
-        bool RegisterError(Error error, User user, string origin, string details, DateTime dateTime, string userToken);
+        ErrorOccurrence RegisterOrUpdateErrorOccurrence(ErrorOccurrence errorOccurrence);
 
         // retorna a lista (detalhada) de todos os erros de um tipo de level individualmente
         List<ErrorOccurrence> ListOccurencesByLevel(int level);
@@ -15,5 +14,6 @@ namespace CentralDeErros.Api.Interfaces
         // retorna 
         List<ErrorOccurrence> Consult(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado);
 
+        bool ErrorOccurrenceExists(int id);
     }
 }

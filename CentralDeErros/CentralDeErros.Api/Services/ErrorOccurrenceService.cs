@@ -1,4 +1,6 @@
-﻿using CentralDeErros.Api.Models;
+﻿using CentralDeErros.Api.Interfaces;
+using CentralDeErros.Api.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,26 +8,28 @@ using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Services
 {
-    public class ErrorOccurrenceService : IErrorOccurrenceService
+    public class ErrorOccurrenceService : IErrorOccurrence
     {
 
         private ErrorDbContext _context;
 
         public ErrorOccurrenceService (ErrorDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
-        public bool RegisterError(Error error, User user, string origin, string details, DateTime dateTime, string userToken)
+        public ErrorOccurrence RegisterOrUpdateErrorOccurrence(ErrorOccurrence errorOccurrence)
         {
-            _context.ErrorOccurrences.Add(new ErrorOccurrence { Error = error, User = user, Origin = origin, Details = details, DateTime = dateTime });
-
-            if (_context.ErrorOccurrences.FirstOrDefault(e => e.Error == error && e.User == user && e.Origin == origin && e.Details == details && e.DateTime == dateTime) != null)
+            if (_context.Users.Any(u => u.UserId == errorOccurrence.UserId) &&
+                 _context.Errors.Any(e => e.ErrorId == errorOccurrence.ErrorId) &&
+                 _context.Situations.Any(s => s.SituationId == errorOccurrence.SituationId))
             {
-                return true;
+                var state = errorOccurrence.ErrorOccurrenceId == 0 ? EntityState.Added : EntityState.Modified;
+                _context.Entry(errorOccurrence).State = state;
+                _context.SaveChanges();
             }
 
-            return false;
+            return errorOccurrence;
         }
 
         public List<ErrorOccurrence> Consult(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado)
@@ -49,17 +53,17 @@ namespace CentralDeErros.Api.Services
             //else if (sortOrder == SortOrder.SortByRank)
             //    orderByFunc = item => item.Rank;
 
-            string ordenacao = null;
+            //string ordenacao = null;
 
-            if (campoOrdenacao == 1)
-            {
-                ordenacao = "Error.Level";
+            //if (campoOrdenacao == 1)
+            //{
+            //    ordenacao = "Error.Level";
 
-            } 
-            else if (campoOrdenacao == 2)
-            {
-                ordenacao = "Error.Frequencia";
-            }
+            //} 
+            //else if (campoOrdenacao == 2)
+            //{
+            //    ordenacao = "Error.Frequencia";
+            //}
 
             return _context.ErrorOccurrences.Where(o => o.Error.EnvironmentId == ambiente).ToList();
         }
@@ -67,6 +71,11 @@ namespace CentralDeErros.Api.Services
         public List<ErrorOccurrence> ListOccurencesByLevel(int level)
         {
             return _context.ErrorOccurrences.Where(o => o.Error.LevelId == level).ToList();
+        }
+
+        public bool ErrorOccurrenceExists(int id)
+        {
+            return _context.ErrorOccurrences.Any(e => e.ErrorOccurrenceId == id);
         }
     }
 }
