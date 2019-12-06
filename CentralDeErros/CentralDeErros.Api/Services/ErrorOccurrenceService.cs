@@ -1,4 +1,6 @@
-﻿using CentralDeErros.Api.Models;
+﻿using CentralDeErros.Api.Interfaces;
+using CentralDeErros.Api.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,67 +8,117 @@ using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Services
 {
-    public class ErrorOccurrenceService : IErrorOccurrenceService
+    public class ErrorOccurrenceService : IErrorOccurrence
     {
 
-        private ErrorDbContext _context;
+        private readonly ErrorDbContext _context;
+        private readonly ISituation _situationService;
+        private readonly ILevel _levelService;
+        private readonly IError _errorService;
 
-        public ErrorOccurrenceService (ErrorDbContext context)
+        public ErrorOccurrenceService (ErrorDbContext context, ISituation situationService, ILevel levelService, IError errorService)
         {
-            this._context = context;
+            _context = context;
+            _situationService = situationService;
+            _levelService = levelService;
+            _errorService = errorService;
         }
 
-        public bool RegisterError(Error error, User user, string origin, string details, DateTime dateTime, string userToken)
+        public ErrorOccurrence RegisterOrUpdateErrorOccurrence(ErrorOccurrence errorOccurrence)
         {
-            _context.ErrorOccurrences.Add(new ErrorOccurrence { Error = error, User = user, Origin = origin, Details = details, DateTime = dateTime });
-
-            if (_context.ErrorOccurrences.FirstOrDefault(e => e.Error == error && e.User == user && e.Origin == origin && e.Details == details && e.DateTime == dateTime) != null)
+            if (_context.Users.Any(u => u.UserId == errorOccurrence.UserId) &&
+                 _context.Errors.Any(e => e.ErrorId == errorOccurrence.ErrorId) &&
+                 _context.Situations.Any(s => s.SituationId == errorOccurrence.SituationId))
             {
-                return true;
+                var state = errorOccurrence.ErrorOccurrenceId == 0 ? EntityState.Added : EntityState.Modified;
+                _context.Entry(errorOccurrence).State = state;
+                _context.SaveChanges();
             }
 
-            return false;
+            return errorOccurrence;
         }
 
         public List<ErrorOccurrence> Consult(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado)
         {
-            // dado vem do frontEnd
+            List<ErrorOccurrence> errorOccurrenceList = new List<ErrorOccurrence>();
+            List<Error> errorList = new List<Error>();
+            errorList = _errorService.Consult(ambiente, campoOrdenacao, campoBuscado, textoBuscado);
 
-            // Campo ordenação
-            // 1 - Level
-            // 2 - Frequência
-
-            // Campo buscado
-            // 1 - Level
-            // 2 - Descrição
-            // 3 - Origem
-
-            //TODO
-
-            //Func<OcorrenciaErro, Object> orderByFunc = null;
-            //if (sortOrder == SortOrder.SortByName)
-            //    orderByFunc = item => item.Error.Level;
-            //else if (sortOrder == SortOrder.SortByRank)
-            //    orderByFunc = item => item.Rank;
-
-            string ordenacao = null;
-
-            if (campoOrdenacao == 1)
+            foreach (var item in errorList)
             {
-                ordenacao = "Error.Level";
+                var occList = _context.ErrorOccurrences.Where(x => x.ErrorId == item.Id).ToList();
 
-            } 
-            else if (campoOrdenacao == 2)
-            {
-                ordenacao = "Error.Frequencia";
+                foreach (var itemOcc in occList)
+                {
+                    errorOccurrenceList.Add(itemOcc);
+                }
             }
+            return errorOccurrenceList;
+        }
 
-            return _context.ErrorOccurrences.Where(o => o.Error.EnvironmentId == ambiente).ToList();
+        public class Occurrences
+        {
+            public int ErrorId { get; set; }
+            public int Quantity { get; set; }
         }
 
         public List<ErrorOccurrence> ListOccurencesByLevel(int level)
         {
             return _context.ErrorOccurrences.Where(o => o.Error.LevelId == level).ToList();
+        }
+
+        public bool ErrorOccurrenceExists(int id)
+        {
+            return _context.ErrorOccurrences.Any(e => e.ErrorOccurrenceId == id);
+        }
+
+        public ErrorOccurrence FileErrorOccurrence(ErrorOccurrence errorOccurrence)
+        {
+            if (_context.Users.Any(u => u.UserId == errorOccurrence.UserId) &&
+                 _context.Errors.Any(e => e.ErrorId == errorOccurrence.ErrorId) &&
+                 _context.Situations.Any(s => s.SituationId == errorOccurrence.SituationId))
+            {
+                var state = errorOccurrence.ErrorOccurrenceId == 0 ? EntityState.Added : EntityState.Modified;
+                var FileErrorOccurrence = errorOccurrence.Situation;
+                
+                if (_situationService.ConsultSituationByName("Arquivado") == null)
+                    return null;
+
+                errorOccurrence.Situation = _situationService.ConsultSituationByName("Arquivado");
+                errorOccurrence.SituationId = _situationService.ConsultSituationByName("Arquivado").SituationId;
+
+                _context.Entry(errorOccurrence).State = state;
+                _context.SaveChanges();
+            }
+
+            return errorOccurrence;
+        }
+
+        public ErrorOccurrence DeleteErrorOccurrence(ErrorOccurrence errorOccurrence)
+        {
+            if (_context.Users.Any(u => u.UserId == errorOccurrence.UserId) &&
+                  _context.Errors.Any(e => e.ErrorId == errorOccurrence.ErrorId) &&
+                  _context.Situations.Any(s => s.SituationId == errorOccurrence.SituationId))
+            {
+                var state = errorOccurrence.ErrorOccurrenceId == 0 ? EntityState.Added : EntityState.Modified;
+                var FileErrorOccurrence = errorOccurrence.Situation;
+
+                if (_situationService.ConsultSituationByName("Arquivado") == null)
+                    return null;
+
+                errorOccurrence.Situation = _situationService.ConsultSituationByName("Apagado (Inativo)");
+                errorOccurrence.SituationId = _situationService.ConsultSituationByName("Apagado (Inativo)").SituationId;
+
+                _context.Entry(errorOccurrence).State = state;
+                _context.SaveChanges();
+            }
+
+            return errorOccurrence;
+        }
+
+        public ErrorOccurrence ConsultErrorOccurrenceById(int errorOccurrenceId)
+        {
+            return _context.ErrorOccurrences.Find(errorOccurrenceId);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
+using CentralDeErros.Api.Interfaces;
+using AutoMapper;
+using CentralDeErros.Api.DTOs;
 
 namespace CentralDeErros.Api.Controllers
 {
@@ -13,52 +13,83 @@ namespace CentralDeErros.Api.Controllers
     [ApiController]
     public class ErrorsController : ControllerBase
     {
-        private readonly ErrorDbContext _context;
+        private readonly IError _service;
+        private readonly IEnvironment _environmentService;
+        private readonly ILevel _levelService;
+        private readonly IMapper _mapper;
 
-        public ErrorsController(ErrorDbContext context)
+        public ErrorsController(IError service, IEnvironment environmentService, ILevel levelService, IMapper mapper)
         {
-            _context = context;
+            _service = service;
+            _environmentService = environmentService;
+            _levelService  = levelService;
+            _mapper = mapper;
         }
 
         // GET: api/Errors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Error>>> GetErrors()
+        public ActionResult<IEnumerable<ErrorDTO>> GetErrors()
         {
-            return await _context.Errors.ToListAsync();
+            var errors = _service.ConsultAllErrors();
+
+            if (errors == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(errors.
+                        Select(x => _mapper.Map<ErrorDTO>(x)).
+                        ToList());
+            }
+        }
+
+        //GET: api/Errors/1/2/0/0
+        [HttpGet("{ambiente}/{campoOrdenacao}/{campoBuscado}/{textoBuscado}")]
+        public ActionResult<List<ErrorDTO>> GetErrorFilter(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado)
+        {
+            var errors = _service.Consult(ambiente, campoOrdenacao, campoBuscado, textoBuscado);
+
+            if (errors == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(errors.
+                        Select(x => _mapper.Map<ErrorDTO>(x)).
+                        ToList()); ;
         }
 
         // GET: api/Errors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Error>> GetError(int id)
+        public ActionResult<ErrorDTO> GetError(int id)
         {
-            var error = await _context.Errors.FindAsync(id);
+            var error = _service.ConsultError(id);
 
             if (error == null)
             {
                 return NotFound();
             }
 
-            return error;
+            return Ok(_mapper.Map<ErrorDTO>(error));
         }
 
         // PUT: api/Errors/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutError(int id, Error error)
+        public ActionResult<ErrorDTO> PutError(int id, Error error)
         {
-            if (id != error.SituationId)
+            if (id != error.ErrorId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(error).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateError(error)));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ErrorExists(id))
+                if (!_service.ErrorExists(id))
                 {
                     return NotFound();
                 }
@@ -67,53 +98,22 @@ namespace CentralDeErros.Api.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Errors
         [HttpPost]
-        public async Task<ActionResult<Error>> PostError(Error error)
+        public ActionResult<Error> PostError([FromBody] ErrorDTO value)
         {
-            _context.Errors.Add(error);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ErrorExists(error.SituationId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetError", new { id = error.SituationId }, error);
-        }
+            if (!_environmentService.EnvironmentExists(value.EnvironmentId))
+                return BadRequest("400 BadRequest: Environment does not exists.");
 
-        // DELETE: api/Errors/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Error>> DeleteError(int id)
-        {
-            var error = await _context.Errors.FindAsync(id);
-            if (error == null)
-            {
-                return NotFound();
-            }
+            if (!_levelService.LevelExists(value.LevelId))
+                return BadRequest("400 BadRequest: Level does not exists.");
 
-            _context.Errors.Remove(error);
-            await _context.SaveChangesAsync();
-
-            return error;
-        }
-
-        private bool ErrorExists(int id)
-        {
-            return _context.Errors.Any(e => e.SituationId == id);
+            return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateError(_mapper.Map<Error>(value))));
         }
     }
 }
