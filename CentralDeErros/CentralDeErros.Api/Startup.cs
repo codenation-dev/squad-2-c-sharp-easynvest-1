@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+using CentralDeErros.Api.Interfaces;
 
 namespace CentralDeErros.Api
 {
@@ -25,11 +26,11 @@ namespace CentralDeErros.Api
             services.AddDbContext<ErrorDbContext>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddScoped<IEnvironment, EnvironmentService>();
-            services.AddScoped<IErrorOccurrenceService, ErrorOccurrenceService>();
-            services.AddScoped<IErrorService, ErrorService>();
+            services.AddScoped<IErrorOccurrence, ErrorOccurrenceService>();
+            services.AddScoped<IError, ErrorService>();
             services.AddScoped<ILevel, LevelService>();
             services.AddScoped<ISituation, SituationService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUser, UserService>();
 
         }
 

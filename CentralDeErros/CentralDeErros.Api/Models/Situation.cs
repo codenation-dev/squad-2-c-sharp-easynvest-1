@@ -20,6 +20,6 @@ namespace CentralDeErros.Api.Models
         [Required]
         public string SituationName { get; set; }
 
-        public ICollection<Error> Errors { get; set; }
+        public ICollection<ErrorOccurrence> ErrorOccurrences { get; set; }
     }
 }

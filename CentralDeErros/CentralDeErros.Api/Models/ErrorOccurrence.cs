@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CentralDeErros.Api.Models
 {
@@ -40,5 +37,11 @@ namespace CentralDeErros.Api.Models
 
         [Column("ERROR_ID"), Required]
         public Error Error { get; set; }// referencia 
+
+        [ForeignKey("SITUATION_ID"), Required]
+        public int SituationId { get; set; }
+
+        [Column("SITUATION_ID"), Required]
+        public Situation Situation { get; set; }// referencia 
     }
 }
