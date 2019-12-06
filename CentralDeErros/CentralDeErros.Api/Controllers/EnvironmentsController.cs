@@ -6,11 +6,13 @@ using CentralDeErros.Api.DTOs;
 using AutoMapper;
 using CentralDeErros.Api.Interfaces;
 using CentralDeErros.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EnvironmentsController : ControllerBase
     {
         private readonly IEnvironment _service;

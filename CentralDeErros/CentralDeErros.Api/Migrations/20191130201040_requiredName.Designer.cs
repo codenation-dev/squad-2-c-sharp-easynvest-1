@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CentralDeErros.Api.Migrations
 {
     [DbContext(typeof(ErrorDbContext))]
-    [Migration("20191123190237_PrimeiraMigracao")]
-    partial class PrimeiraMigracao
+    [Migration("20191130201040_requiredName")]
+    partial class requiredName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -148,7 +148,7 @@ namespace CentralDeErros.Api.Migrations
                     b.ToTable("SITUATION");
                 });
 
-            modelBuilder.Entity("CentralDeErros.Api.Models.User", b =>
+            modelBuilder.Entity("CentralDeErros.Api.Models.Users", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -160,8 +160,10 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("EMAIL")
                         .HasMaxLength(200);
 
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnName("EXPIRATION");
+
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnName("NAME")
                         .HasMaxLength(200);
 
@@ -171,13 +173,12 @@ namespace CentralDeErros.Api.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Token")
-                        .IsRequired()
                         .HasColumnName("TOKEN")
-                        .HasMaxLength(40);
+                        .HasMaxLength(200);
 
                     b.HasKey("UserId");
 
-                    b.ToTable("USER");
+                    b.ToTable("USERS");
                 });
 
             modelBuilder.Entity("CentralDeErros.Api.Models.Error", b =>
@@ -200,7 +201,7 @@ namespace CentralDeErros.Api.Migrations
 
             modelBuilder.Entity("CentralDeErros.Api.Models.ErrorOccurrence", b =>
                 {
-                    b.HasOne("CentralDeErros.Api.Models.User", "User")
+                    b.HasOne("CentralDeErros.Api.Models.Users", "User")
                         .WithMany("ErrorOccurrences")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
