@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CentralDeErros.Api.Models
 {
@@ -27,6 +30,7 @@ namespace CentralDeErros.Api.Models
         [StringLength(50)]
         [Required]
         public string Password { get; set; }
+
 
         [Column("TOKEN")]
         [MaxLength(400)]
