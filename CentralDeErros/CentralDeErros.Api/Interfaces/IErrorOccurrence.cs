@@ -8,12 +8,16 @@ namespace CentralDeErros.Api.Interfaces
     {
         ErrorOccurrence RegisterOrUpdateErrorOccurrence(ErrorOccurrence errorOccurrence);
 
-        // retorna a lista (detalhada) de todos os erros de um tipo de level individualmente
+        ErrorOccurrence ConsultErrorOccurrenceById(int errorOccurrenceId);
+
         List<ErrorOccurrence> ListOccurencesByLevel(int level);
 
-        // retorna 
         List<ErrorOccurrence> Consult(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado);
 
         bool ErrorOccurrenceExists(int id);
+
+        ErrorOccurrence FileErrorOccurrence(ErrorOccurrence errorOccurrence);
+
+        ErrorOccurrence DeleteErrorOccurrence(ErrorOccurrence errorOccurrence);
     }
 }

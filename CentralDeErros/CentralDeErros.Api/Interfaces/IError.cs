@@ -9,6 +9,8 @@ namespace CentralDeErros.Api.Interfaces
 
         Error ConsultError(int id);
 
+        List<Error> Consult(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado)
+
         List<Error> ConsultAllErrors();
 
         bool ErrorExists(int id);

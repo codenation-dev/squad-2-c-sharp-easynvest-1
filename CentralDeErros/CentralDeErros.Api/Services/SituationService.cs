@@ -23,9 +23,14 @@ namespace CentralDeErros.Api.Services
             return situation;
         }
 
-        public Situation ConsultSituation(int id)
+        public Situation ConsultSituationById(int id)
         {
             return _context.Situations.Find(id);
+        }
+
+        public Situation ConsultSituationByName(string name)
+        {
+            return _context.Situations.FirstOrDefault(s => s.SituationName == name);
         }
 
         public List<Situation> ConsultAllSituations()

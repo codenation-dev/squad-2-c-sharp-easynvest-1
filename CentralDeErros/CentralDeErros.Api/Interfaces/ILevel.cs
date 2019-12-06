@@ -7,7 +7,9 @@ namespace CentralDeErros.Api.Interfaces
     {
         Level RegisterOrUpdateLevel(Level level);
 
-        Level ConsultLevel(int id);
+        Level ConsultLevelById(int id);
+
+        Level ConsultLevelByName(string name);
 
         List<Level> ConsultAllLevels();
 

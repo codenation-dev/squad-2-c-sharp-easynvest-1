@@ -23,9 +23,14 @@ namespace CentralDeErros.Api.Services
             return level;
         }
 
-        public Level ConsultLevel(int id)
+        public Level ConsultLevelById(int id)
         {
             return _context.Levels.Find(id);
+        }
+
+        public Level ConsultLevelByName(string name)
+        {
+            return _context.Levels.FirstOrDefault(l => l.LevelName == name);
         }
 
         public List<Level> ConsultAllLevels()

@@ -45,7 +45,7 @@ namespace CentralDeErros.Api.Controllers
         [HttpGet("{id}")]
         public ActionResult<LevelDTO> GetLevel(int id)
         {
-            var level = _service.ConsultLevel(id);
+            var level = _service.ConsultLevelById(id);
 
             if (level == null)
             {
@@ -87,7 +87,7 @@ namespace CentralDeErros.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterOrUpdateLevel(_mapper.Map<Level>(value))));
+            return Ok(_mapper.Map<LevelDTO>(_service.RegisterOrUpdateLevel(_mapper.Map<Level>(value))));
         }
     }
 }

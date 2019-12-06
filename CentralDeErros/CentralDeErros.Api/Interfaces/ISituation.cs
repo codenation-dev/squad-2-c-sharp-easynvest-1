@@ -7,7 +7,9 @@ namespace CentralDeErros.Api.Interfaces
     {
         Situation RegisterOrUpdateSituation(Situation situation);
 
-        Situation ConsultSituation(int id);
+        Situation ConsultSituationById(int id);
+
+        Situation ConsultSituationByName(string name);
 
         List<Situation> ConsultAllSituations();
 

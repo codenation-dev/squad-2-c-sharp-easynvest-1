@@ -44,9 +44,25 @@ namespace CentralDeErros.Api.Controllers
             }
         }
 
+        //GET: api/Errors/1/2/0/0
+        [HttpGet("{ambiente}/{campoOrdenacao}/{campoBuscado}/{textoBuscado}")]
+        public ActionResult<List<ErrorDTO>> GetErrorFilter(int ambiente, int campoOrdenacao, int campoBuscado, string textoBuscado)
+        {
+            var errors = _service.Consult(ambiente, campoOrdenacao, campoBuscado, textoBuscado);
+
+            if (errors == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(errors.
+                        Select(x => _mapper.Map<ErrorDTO>(x)).
+                        ToList()); ;
+        }
+
         // GET: api/Errors/5
         [HttpGet("{id}")]
-        public ActionResult<Error> GetError(int id)
+        public ActionResult<ErrorDTO> GetError(int id)
         {
             var error = _service.ConsultError(id);
 

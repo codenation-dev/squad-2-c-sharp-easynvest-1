@@ -24,7 +24,7 @@ namespace CentralDeErros.Api.Controllers
 
         // GET: api/Situations
         [HttpGet]
-        public ActionResult<IEnumerable<Situation>> GetSituations()
+        public ActionResult<IEnumerable<SituationDTO>> GetSituations()
         {
             var situations = _service.ConsultAllSituations();
 
@@ -42,9 +42,9 @@ namespace CentralDeErros.Api.Controllers
 
         // GET: api/Situations/5
         [HttpGet("{id}")]
-        public ActionResult<Situation> GetSituation(int id)
+        public ActionResult<SituationDTO> GetSituation(int id)
         {
-            var situation = _service.ConsultSituation(id);
+            var situation = _service.ConsultSituationById(id);
 
             if (situation == null)
             {
@@ -65,7 +65,7 @@ namespace CentralDeErros.Api.Controllers
 
             try
             {
-                return Ok(_mapper.Map<LevelDTO>(_service.RegisterOrUpdateSituation(situation)));
+                return Ok(_mapper.Map<SituationDTO>(_service.RegisterOrUpdateSituation(situation)));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,11 +82,11 @@ namespace CentralDeErros.Api.Controllers
 
         // POST: api/Situations
         [HttpPost]
-        public ActionResult<Situation> PostSituation([FromBody] SituationDTO value)
+        public ActionResult<SituationDTO> PostSituation([FromBody] SituationDTO value)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(_mapper.Map<EnvironmentDTO>(_service.RegisterOrUpdateSituation(_mapper.Map<Situation>(value))));
+            return Ok(_mapper.Map<SituationDTO>(_service.RegisterOrUpdateSituation(_mapper.Map<Situation>(value))));
         }
     }
 }
