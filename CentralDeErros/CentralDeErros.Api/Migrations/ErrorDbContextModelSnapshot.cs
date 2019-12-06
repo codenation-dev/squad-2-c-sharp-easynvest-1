@@ -144,7 +144,7 @@ namespace CentralDeErros.Api.Migrations
                     b.ToTable("SITUATION");
                 });
 
-            modelBuilder.Entity("CentralDeErros.Api.Models.User", b =>
+            modelBuilder.Entity("CentralDeErros.Api.Models.Users", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -155,6 +155,9 @@ namespace CentralDeErros.Api.Migrations
                         .IsRequired()
                         .HasColumnName("EMAIL")
                         .HasMaxLength(200);
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnName("EXPIRATION");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -167,13 +170,12 @@ namespace CentralDeErros.Api.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Token")
-                        .IsRequired()
                         .HasColumnName("TOKEN")
-                        .HasMaxLength(40);
+                        .HasMaxLength(400);
 
                     b.HasKey("UserId");
 
-                    b.ToTable("USER");
+                    b.ToTable("USERS");
                 });
 
             modelBuilder.Entity("CentralDeErros.Api.Models.Error", b =>
@@ -197,6 +199,9 @@ namespace CentralDeErros.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CentralDeErros.Api.Models.User", "User")
+            modelBuilder.Entity("CentralDeErros.Api.Models.ErrorOccurrence", b =>
+                {
+                    b.HasOne("CentralDeErros.Api.Models.Users", "User")
                         .WithMany("ErrorOccurrences")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
