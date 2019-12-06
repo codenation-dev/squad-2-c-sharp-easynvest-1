@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CentralDeErros.Api.Interfaces
 {
-    interface IErrorOccurrence
+    public interface IErrorOccurrence
     {
         ErrorOccurrence RegisterOrUpdateErrorOccurrence(ErrorOccurrence errorOccurrence);
 

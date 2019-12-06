@@ -14,11 +14,15 @@ namespace CentralDeErros.Api.Controllers
     public class ErrorsController : ControllerBase
     {
         private readonly IError _service;
+        private readonly IEnvironment _environmentService;
+        private readonly ILevel _levelService;
         private readonly IMapper _mapper;
 
-        public ErrorsController(IError service, IMapper mapper)
+        public ErrorsController(IError service, IEnvironment environmentService, ILevel levelService, IMapper mapper)
         {
             _service = service;
+            _environmentService = environmentService;
+            _levelService  = levelService;
             _mapper = mapper;
         }
 
@@ -86,6 +90,13 @@ namespace CentralDeErros.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!_environmentService.EnvironmentExists(value.EnvironmentId))
+                return BadRequest("400 BadRequest: Environment does not exists.");
+
+            if (!_levelService.LevelExists(value.LevelId))
+                return BadRequest("400 BadRequest: Level does not exists.");
+
             return Ok(_mapper.Map<ErrorDTO>(_service.RegisterOrUpdateError(_mapper.Map<Error>(value))));
         }
     }

@@ -17,7 +17,7 @@ namespace CentralDeErros.Api.Controllers
         private readonly ILevel _service;
         private readonly IMapper _mapper;
 
-        private LevelsController(ILevel service, IMapper mapper)
+        public LevelsController(ILevel service, IMapper mapper)
         {
             _mapper = mapper;
             _service = service;

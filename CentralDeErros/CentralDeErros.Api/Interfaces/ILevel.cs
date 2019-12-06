@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CentralDeErros.Api.Interfaces
 {
-    interface ILevel
+    public interface ILevel
     {
         Level RegisterOrUpdateLevel(Level level);
 

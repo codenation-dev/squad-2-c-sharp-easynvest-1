@@ -19,7 +19,7 @@ namespace CentralDeErros.Api.Controllers
         private readonly IErrorOccurrence _service;
         private readonly IMapper _mapper;
 
-        private ErrorOccurrencesController(IErrorOccurrence service, IMapper mapper)
+        public ErrorOccurrencesController(IErrorOccurrence service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
