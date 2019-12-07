@@ -13,7 +13,7 @@ namespace CentralDeErros.Api
             CreateMap<ErrorOccurrence, ErrorOccurrenceDTO>().ReverseMap();
             CreateMap<Level, LevelDTO>().ReverseMap();
             CreateMap<Situation, SituationDTO>().ReverseMap();
-            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Users, UserDTO>().ReverseMap();
         }
     }
 }
