@@ -66,35 +66,22 @@ namespace CentralDeErros.Api.Controllers
             }
         }
 
-        // GET: api/ErrorOccurrences/File/1
-        [HttpPut("Delete/{id}")]
-        public ActionResult<IEnumerable<ErrorOccurrenceDTO>> DeleteErrorOccurrence(int id, ErrorOccurrence errorOccurrence)
+        // POST: api/ErrorOccurrences/Delete/1
+        [HttpPost("Delete/{value}")]
+        public ActionResult<ErrorOccurrence> DeleteErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
         {
-            if (id != errorOccurrence.ErrorOccurrenceId)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            try
-            {
-                return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.DeleteErrorOccurrence(errorOccurrence)));
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_service.ErrorOccurrenceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (_service.ConsultErrorOccurrenceById(value.ErrorOccurrenceId) == null)
+                return BadRequest("400 BadRequest: ErrorOccurence does not exists.");
+
+            return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.DeleteErrorOccurrence(_mapper.Map<ErrorOccurrence>(value))));
         }
 
-        // POST: api/ErrorOccurrences
+        // POST: api/ErrorOccurrences/File/1
         [HttpPost("File/{value}")]
-        public ActionResult<ErrorOccurrence> PostErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
+        public ActionResult<ErrorOccurrence> FileErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -166,7 +153,7 @@ namespace CentralDeErros.Api.Controllers
 
         // POST: api/ErrorOccurrences
         [HttpPost]
-        public ActionResult<ErrorOccurrence> FileErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
+        public ActionResult<ErrorOccurrence> PostErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
