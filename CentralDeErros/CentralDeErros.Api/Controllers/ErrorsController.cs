@@ -11,6 +11,7 @@ namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class ErrorsController : ControllerBase
     {
         private readonly IError _service;

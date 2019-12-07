@@ -1,11 +1,18 @@
-﻿using CentralDeErros.Api.Models;
+using CentralDeErros.Api.Models;
 using CentralDeErros.Api.Services;
+using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using CentralDeErros.Api.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CentralDeErros.Api
 {
@@ -15,7 +22,6 @@ namespace CentralDeErros.Api
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -31,18 +37,73 @@ namespace CentralDeErros.Api
             services.AddScoped<ILevel, LevelService>();
             services.AddScoped<ISituation, SituationService>();
             services.AddScoped<IUser, UserService>();
+            services.AddDbContext<ErrorDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CentralDeErros")));
+
+            services.AddCors();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<Users>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),//gera chave segura
+                    ValidateIssuer = true, //valida o emissor 
+                    ValidateAudience = true, //valida a url
+                    ValidateLifetime = true,
+                    ValidAudience = appSettings.ValidoEm, //informo qual é a url
+                    ValidIssuer = appSettings.Emissor, //informo qual é o emissor do token
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseMvcWithDefaultRoute();
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            app.UseHttpsRedirection();
+            
+            app.UseAuthentication();
+            app.UseMvc();
+            
         }
     }
 }

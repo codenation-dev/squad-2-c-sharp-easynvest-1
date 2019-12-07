@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CentralDeErros.Api.Models;
@@ -7,11 +6,13 @@ using CentralDeErros.Api.Interfaces;
 using AutoMapper;
 using CentralDeErros.Api.DTOs;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LevelsController : ControllerBase
     {
         private readonly ILevel _service;
