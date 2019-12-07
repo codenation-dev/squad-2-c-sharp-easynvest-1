@@ -25,7 +25,7 @@ namespace CentralDeErros.Api.Controllers
 
         [AllowAnonymous]//qualquer user acesse este método
         [HttpPost]
-        public IActionResult RequestToken([FromBody]Users requestUser)
+        public IActionResult Login([FromBody]Users requestUser)
         {
             
                 if (requestUser.Name == requestUser.Name && requestUser.Email == requestUser.Email && requestUser.Password == requestUser.Password)
@@ -50,7 +50,7 @@ namespace CentralDeErros.Api.Controllers
 
                     var Token = new JwtSecurityTokenHandler().WriteToken(token);
                 
-                    RequestTokenSave(requestUser, Token, exp);
+                   TokenSave(requestUser, Token, exp);
 
                  return Ok(new
                     {
@@ -66,7 +66,7 @@ namespace CentralDeErros.Api.Controllers
 
         }
 
-        public Users RequestTokenSave(Users requestUser, string token, DateTime exp)
+        public Users TokenSave(Users requestUser, string token, DateTime exp)
         {
            
             var TokenSave = _context.Users.Where(x =>x.Name==requestUser.Name && x.Email == requestUser.Email && x.Password == requestUser.Password).FirstOrDefault();
