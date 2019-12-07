@@ -198,7 +198,10 @@ namespace CentralDeErros.Api.Migrations
                         .HasForeignKey("SituationId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("CentralDeErros.Api.Models.User", "User")
+                    b.HasOne("CentralDeErros.Api.Models.User", "User");
+                }
+            );
+
             modelBuilder.Entity("CentralDeErros.Api.Models.ErrorOccurrence", b =>
                 {
                     b.HasOne("CentralDeErros.Api.Models.Users", "User")
