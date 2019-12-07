@@ -28,41 +28,40 @@ namespace CentralDeErros.Api.Controllers
         public IActionResult RequestToken([FromBody]Users requestUser)
         {
             
-                if (requestUser.Email == requestUser.Email && requestUser.Password == requestUser.Password)
+            if (requestUser.Email == requestUser.Email && requestUser.Password == requestUser.Password)
+            {
+                var claims = new[]
                 {
-                    var claims = new[]
-                    {
-                    new Claim(JwtRegisteredClaimNames.UniqueName, requestUser.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, requestUser.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
-                    };
-                    var Key = Encoding.ASCII.GetBytes("AppSettings.Secret");
-                    var credenciais = new SigningCredentials(new SymmetricSecurityKey(Key), SecurityAlgorithms.HmacSha256);
-                    var exp = DateTime.UtcNow.AddHours(2);
-                    var emissor = ("AppSettings.Emissor");
-                    var validoEm = ("AppSettings.ValidoEm");
+                };
+                var Key = Encoding.ASCII.GetBytes("AppSettings.Secret");
+                var credenciais = new SigningCredentials(new SymmetricSecurityKey(Key), SecurityAlgorithms.HmacSha256);
+                var exp = DateTime.UtcNow.AddHours(2);
+                var emissor = ("AppSettings.Emissor");
+                var validoEm = ("AppSettings.ValidoEm");
 
-                    var token = new JwtSecurityToken(
-                    issuer: emissor,
-                    audience: validoEm,
-                    claims: claims,
-                    signingCredentials: credenciais);
+                var token = new JwtSecurityToken(
+                issuer: emissor,
+                audience: validoEm,
+                claims: claims,
+                signingCredentials: credenciais);
 
-                    var Token = new JwtSecurityTokenHandler().WriteToken(token);
+                var Token = new JwtSecurityTokenHandler().WriteToken(token);
                 
-                    RequestTokenSave(requestUser, Token, exp);
+                RequestTokenSave(requestUser, Token, exp);
 
-                 return Ok(new
-                    {
-                        TokenJWT = Token,
-                        Expiration = exp
+                return Ok(new
+                {
+                    TokenJWT = Token,
+                    Expiration = exp
 
-                    });
+                });
 
-                }
+            }
 
-                return BadRequest("Credenciais Inválidas");
-            
+            return BadRequest("Credenciais Inválidas");
 
         }
 

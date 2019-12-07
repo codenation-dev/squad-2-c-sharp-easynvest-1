@@ -31,7 +31,7 @@ namespace CentralDeErros.Api.Services
                  _context.Situations.Any(s => s.SituationId == errorOccurrence.SituationId))
             {
                 var state = errorOccurrence.ErrorOccurrenceId == 0 ? EntityState.Added : EntityState.Modified;
-                _context.Entry(errorOccurrence).State = state;
+                _context.ErrorOccurrences.Add(errorOccurrence);
                 _context.SaveChanges();
             }
 
