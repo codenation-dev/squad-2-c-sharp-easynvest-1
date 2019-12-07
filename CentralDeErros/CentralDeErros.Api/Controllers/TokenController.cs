@@ -28,7 +28,7 @@ namespace CentralDeErros.Api.Controllers
         public IActionResult RequestToken([FromBody]Users requestUser)
         {
             
-                if (requestUser.Email == requestUser.Email && requestUser.Password == requestUser.Password)
+                if (requestUser.Name == requestUser.Name && requestUser.Email == requestUser.Email && requestUser.Password == requestUser.Password)
                 {
                     var claims = new[]
                     {
@@ -69,7 +69,7 @@ namespace CentralDeErros.Api.Controllers
         public Users RequestTokenSave(Users requestUser, string token, DateTime exp)
         {
            
-            var TokenSave = _context.Users.Where(x => x.Email == requestUser.Email && x.Password == requestUser.Password).FirstOrDefault();
+            var TokenSave = _context.Users.Where(x =>x.Name==requestUser.Name && x.Email == requestUser.Email && x.Password == requestUser.Password).FirstOrDefault();
 
             
                 if (TokenSave == null)
