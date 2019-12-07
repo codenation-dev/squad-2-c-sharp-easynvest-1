@@ -12,15 +12,21 @@ namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ErrorOccurrencesController : ControllerBase
     {
         private readonly IErrorOccurrence _service;
+        private readonly IUser _userService;
+        private readonly IError _errorService;
+        private readonly ISituation _situationService;
         private readonly IMapper _mapper;
 
-        public ErrorOccurrencesController(IErrorOccurrence service, IMapper mapper)
+        public ErrorOccurrencesController(IErrorOccurrence service, IUser userService, IError errorService, ISituation situationService, IMapper mapper)
         {
             _service = service;
+            _userService = userService;
+            _errorService = errorService;
+            _situationService = situationService;
             _mapper = mapper;
         }
 
@@ -60,30 +66,30 @@ namespace CentralDeErros.Api.Controllers
             }
         }
 
-        // GET: api/ErrorOccurrences/Archive/1
-        [HttpPut("File/{id}")]
-        public ActionResult<IEnumerable<ErrorOccurrenceDTO>> ArchiveErrorOccurrence (int id, ErrorOccurrence errorOccurrence)
+        // POST: api/ErrorOccurrences/Delete/1
+        [HttpPost("Delete/{value}")]
+        public ActionResult<ErrorOccurrence> DeleteErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
         {
-            if (id != errorOccurrence.ErrorOccurrenceId)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            try
-            {
-                return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.RegisterOrUpdateErrorOccurrence(errorOccurrence)));
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_service.ErrorOccurrenceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (_service.ConsultErrorOccurrenceById(value.ErrorOccurrenceId) == null)
+                return BadRequest("400 BadRequest: ErrorOccurence does not exists.");
+
+            return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.DeleteErrorOccurrence(_mapper.Map<ErrorOccurrence>(value))));
+        }
+
+        // POST: api/ErrorOccurrences/File/1
+        [HttpPost("File/{value}")]
+        public ActionResult<ErrorOccurrence> FileErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (_service.ConsultErrorOccurrenceById(value.ErrorOccurrenceId) == null)
+                return BadRequest("400 BadRequest: ErrorOccurence does not exists.");
+
+            return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.FileErrorOccurrence(_mapper.Map<ErrorOccurrence>(value))));
         }
 
         //GET: api/Errors/1/2/0/0
@@ -151,6 +157,16 @@ namespace CentralDeErros.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!_userService.UserExists(value.UserId))
+                return BadRequest("400 BadRequest: User does not exists.");
+
+            if (!_errorService.ErrorExists(value.ErrorId))
+                return BadRequest("400 BadRequest: Error does not exists.");
+
+            if (!_situationService.SituationExists(value.SituationId))
+                return BadRequest("400 BadRequest: Situation does not exists.");
+
             return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.RegisterOrUpdateErrorOccurrence(_mapper.Map<ErrorOccurrence>(value))));
         }
     }

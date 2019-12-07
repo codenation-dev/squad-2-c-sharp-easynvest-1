@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CentralDeErros.Api.Migrations
 {
     [DbContext(typeof(ErrorDbContext))]
-    [Migration("20191204190908_exp")]
-    partial class exp
+    [Migration("20191207034216_ErrorsPK")]
+    partial class ErrorsPK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace CentralDeErros.Api.Migrations
 
             modelBuilder.Entity("CentralDeErros.Api.Models.Environment", b =>
                 {
-                    b.Property<int>("Environment_Id")
+                    b.Property<int>("EnvironmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -33,18 +33,17 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("ENVIRONMENT")
                         .HasMaxLength(30);
 
-                    b.HasKey("Environment_Id");
+                    b.HasKey("EnvironmentId");
 
                     b.ToTable("ENVIRONMENT");
                 });
 
             modelBuilder.Entity("CentralDeErros.Api.Models.Error", b =>
                 {
-                    b.Property<int>("SituationId");
-
-                    b.Property<int>("EnvironmentId");
-
-                    b.Property<int>("LevelId");
+                    b.Property<int>("ErrorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Code")
                         .HasColumnName("CODE");
@@ -54,19 +53,16 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("DESCRIPTION")
                         .HasMaxLength(200);
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("EnvironmentId");
+
+                    b.Property<int>("LevelId");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnName("TITLE")
                         .HasMaxLength(200);
 
-                    b.HasKey("SituationId", "EnvironmentId", "LevelId");
-
-                    b.HasAlternateKey("Id");
+                    b.HasKey("ErrorId");
 
                     b.HasIndex("EnvironmentId");
 
@@ -90,26 +86,24 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("DETAILS")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("ErrorEnvironmentId");
-
                     b.Property<int>("ErrorId");
-
-                    b.Property<int>("ErrorLevelId");
-
-                    b.Property<int>("ErrorSituationId");
 
                     b.Property<string>("Origin")
                         .IsRequired()
                         .HasColumnName("ORIGIN")
                         .HasMaxLength(200);
 
+                    b.Property<int>("SituationId");
+
                     b.Property<int>("UserId");
 
                     b.HasKey("ErrorOccurrenceId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ErrorId");
 
-                    b.HasIndex("ErrorSituationId", "ErrorEnvironmentId", "ErrorLevelId");
+                    b.HasIndex("SituationId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ERROR_OCCURRENCE");
                 });
@@ -160,7 +154,11 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("EMAIL")
                         .HasMaxLength(200);
 
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnName("EXPIRATION");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("NAME")
                         .HasMaxLength(200);
 
@@ -171,7 +169,7 @@ namespace CentralDeErros.Api.Migrations
 
                     b.Property<string>("Token")
                         .HasColumnName("TOKEN")
-                        .HasMaxLength(200);
+                        .HasMaxLength(400);
 
                     b.HasKey("UserId");
 
@@ -189,23 +187,23 @@ namespace CentralDeErros.Api.Migrations
                         .WithMany("Errors")
                         .HasForeignKey("LevelId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CentralDeErros.Api.Models.Situation", "Situation")
-                        .WithMany("Errors")
-                        .HasForeignKey("SituationId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CentralDeErros.Api.Models.ErrorOccurrence", b =>
                 {
+                    b.HasOne("CentralDeErros.Api.Models.Error", "Error")
+                        .WithMany()
+                        .HasForeignKey("ErrorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CentralDeErros.Api.Models.Situation", "Situation")
+                        .WithMany("ErrorOccurrences")
+                        .HasForeignKey("SituationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("CentralDeErros.Api.Models.Users", "User")
                         .WithMany("ErrorOccurrences")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CentralDeErros.Api.Models.Error", "Error")
-                        .WithMany()
-                        .HasForeignKey("ErrorSituationId", "ErrorEnvironmentId", "ErrorLevelId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

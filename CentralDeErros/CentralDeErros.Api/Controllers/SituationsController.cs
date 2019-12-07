@@ -12,7 +12,7 @@ namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class SituationsController : ControllerBase
     {
         private readonly ISituation _service;

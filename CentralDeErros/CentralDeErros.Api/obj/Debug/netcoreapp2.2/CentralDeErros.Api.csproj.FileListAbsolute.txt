@@ -62,3 +62,4 @@ C:\Users\Je_Driko\Desktop\ProjetoFinalCodenation\CentralDeErros\CentralDeErros.A
 C:\Users\Je_Driko\Desktop\ProjetoFinalCodenation\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.dll
 C:\Users\Je_Driko\Desktop\ProjetoFinalCodenation\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.pdb
 C:\Users\Je_Driko\Desktop\ProjetoFinalCodenation\CentralDeErros\CentralDeErros.Api\obj\Debug\netcoreapp2.2\CentralDeErros.Api.csproj.CopyComplete
+C:\Users\Convex\codenation\central-erros\CentralDeErros\CentralDeErros.Api\bin\Debug\netcoreapp2.2\CentralDeErros.Api.Views.pdb
