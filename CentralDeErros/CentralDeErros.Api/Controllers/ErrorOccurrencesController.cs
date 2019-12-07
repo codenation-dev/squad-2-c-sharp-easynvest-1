@@ -12,15 +12,21 @@ namespace CentralDeErros.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ErrorOccurrencesController : ControllerBase
     {
         private readonly IErrorOccurrence _service;
+        private readonly IUser _userService;
+        private readonly IError _errorService;
+        private readonly ISituation _situationService;
         private readonly IMapper _mapper;
 
-        public ErrorOccurrencesController(IErrorOccurrence service, IMapper mapper)
+        public ErrorOccurrencesController(IErrorOccurrence service, IUser userService, IError errorService, ISituation situationService, IMapper mapper)
         {
             _service = service;
+            _userService = userService;
+            _errorService = errorService;
+            _situationService = situationService;
             _mapper = mapper;
         }
 
@@ -151,6 +157,16 @@ namespace CentralDeErros.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!_userService.UserExists(value.UserId))
+                return BadRequest("400 BadRequest: User does not exists.");
+
+            if (!_errorService.ErrorExists(value.ErrorId))
+                return BadRequest("400 BadRequest: Error does not exists.");
+
+            if (!_situationService.SituationExists(value.SituationId))
+                return BadRequest("400 BadRequest: Situation does not exists.");
+
             return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.RegisterOrUpdateErrorOccurrence(_mapper.Map<ErrorOccurrence>(value))));
         }
     }

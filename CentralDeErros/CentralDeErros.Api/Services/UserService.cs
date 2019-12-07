@@ -38,5 +38,10 @@ namespace CentralDeErros.Api.Services
                 return false;
             }
         }
+
+        public bool UserExists(int id)
+        {
+            return _context.Users.Any(u => u.UserId == id);
+        }
     }
 }

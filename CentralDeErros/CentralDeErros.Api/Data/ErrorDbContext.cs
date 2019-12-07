@@ -19,7 +19,7 @@ namespace CentralDeErros.Api.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CentralDeErros;Trusted_Connection=True");
+                optionsBuilder.UseSqlServer(@"Server=DESKTOP-R629N29\SQLEXPRESS;Database=CentralDeErros;Trusted_Connection=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
