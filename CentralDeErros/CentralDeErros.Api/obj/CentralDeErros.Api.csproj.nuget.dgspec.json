@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj": {}
+    "C:\\Users\\Convex\\codenation\\central-erros\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj": {
+    "C:\\Users\\Convex\\codenation\\central-erros\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj",
+        "projectUniqueName": "C:\\Users\\Convex\\codenation\\central-erros\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj",
         "projectName": "CentralDeErros.Api",
-        "projectPath": "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj",
-        "packagesPath": "C:\\Users\\Je_Driko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Je_Driko\\Desktop\\ProjetoFinalCodenation\\CentralDeErros\\CentralDeErros.Api\\obj\\",
+        "projectPath": "C:\\Users\\Convex\\codenation\\central-erros\\CentralDeErros\\CentralDeErros.Api\\CentralDeErros.Api.csproj",
+        "packagesPath": "C:\\Users\\Convex\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Convex\\codenation\\central-erros\\CentralDeErros\\CentralDeErros.Api\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Je_Driko\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Convex\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
