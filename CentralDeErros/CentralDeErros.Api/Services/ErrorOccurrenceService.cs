@@ -46,7 +46,7 @@ namespace CentralDeErros.Api.Services
 
             foreach (var item in errorList)
             {
-                var occList = _context.ErrorOccurrences.Where(x => x.ErrorId == item.Id).ToList();
+                var occList = _context.ErrorOccurrences.Where(x => x.ErrorId == item.ErrorId).ToList();
 
                 foreach (var itemOcc in occList)
                 {
