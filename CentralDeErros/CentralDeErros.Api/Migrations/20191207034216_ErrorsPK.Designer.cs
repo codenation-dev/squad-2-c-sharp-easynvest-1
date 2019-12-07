@@ -4,14 +4,16 @@ using CentralDeErros.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CentralDeErros.Api.Migrations
 {
     [DbContext(typeof(ErrorDbContext))]
-    partial class ErrorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191207034216_ErrorsPK")]
+    partial class ErrorsPK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

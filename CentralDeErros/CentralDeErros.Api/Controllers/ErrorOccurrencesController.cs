@@ -66,9 +66,9 @@ namespace CentralDeErros.Api.Controllers
             }
         }
 
-        // GET: api/ErrorOccurrences/Archive/1
-        [HttpPut("File/{id}")]
-        public ActionResult<IEnumerable<ErrorOccurrenceDTO>> ArchiveErrorOccurrence (int id, ErrorOccurrence errorOccurrence)
+        // GET: api/ErrorOccurrences/File/1
+        [HttpPut("Delete/{id}")]
+        public ActionResult<IEnumerable<ErrorOccurrenceDTO>> DeleteErrorOccurrence(int id, ErrorOccurrence errorOccurrence)
         {
             if (id != errorOccurrence.ErrorOccurrenceId)
             {
@@ -77,7 +77,7 @@ namespace CentralDeErros.Api.Controllers
 
             try
             {
-                return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.RegisterOrUpdateErrorOccurrence(errorOccurrence)));
+                return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.DeleteErrorOccurrence(errorOccurrence)));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -90,6 +90,19 @@ namespace CentralDeErros.Api.Controllers
                     throw;
                 }
             }
+        }
+
+        // POST: api/ErrorOccurrences
+        [HttpPost("File/{value}")]
+        public ActionResult<ErrorOccurrence> PostErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (_service.ConsultErrorOccurrenceById(value.ErrorOccurrenceId) == null)
+                return BadRequest("400 BadRequest: ErrorOccurence does not exists.");
+
+            return Ok(_mapper.Map<ErrorOccurrenceDTO>(_service.FileErrorOccurrence(_mapper.Map<ErrorOccurrence>(value))));
         }
 
         //GET: api/Errors/1/2/0/0
@@ -153,7 +166,7 @@ namespace CentralDeErros.Api.Controllers
 
         // POST: api/ErrorOccurrences
         [HttpPost]
-        public ActionResult<ErrorOccurrence> PostErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
+        public ActionResult<ErrorOccurrence> FileErrorOccurrence([FromBody] ErrorOccurrenceDTO value)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

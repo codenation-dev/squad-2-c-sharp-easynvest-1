@@ -4,14 +4,16 @@ using CentralDeErros.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CentralDeErros.Api.Migrations
 {
     [DbContext(typeof(ErrorDbContext))]
-    partial class ErrorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191207020239_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,10 +40,9 @@ namespace CentralDeErros.Api.Migrations
 
             modelBuilder.Entity("CentralDeErros.Api.Models.Error", b =>
                 {
-                    b.Property<int>("ErrorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("EnvironmentId");
+
+                    b.Property<int>("LevelId");
 
                     b.Property<int>("Code")
                         .HasColumnName("CODE");
@@ -51,18 +52,19 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("DESCRIPTION")
                         .HasMaxLength(200);
 
-                    b.Property<int>("EnvironmentId");
-
-                    b.Property<int>("LevelId");
+                    b.Property<int>("ErrorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnName("TITLE")
                         .HasMaxLength(200);
 
-                    b.HasKey("ErrorId");
+                    b.HasKey("EnvironmentId", "LevelId");
 
-                    b.HasIndex("EnvironmentId");
+                    b.HasAlternateKey("ErrorId");
 
                     b.HasIndex("LevelId");
 
@@ -84,7 +86,11 @@ namespace CentralDeErros.Api.Migrations
                         .HasColumnName("DETAILS")
                         .HasMaxLength(2000);
 
+                    b.Property<int>("ErrorEnvironmentId");
+
                     b.Property<int>("ErrorId");
+
+                    b.Property<int>("ErrorLevelId");
 
                     b.Property<string>("Origin")
                         .IsRequired()
@@ -97,11 +103,11 @@ namespace CentralDeErros.Api.Migrations
 
                     b.HasKey("ErrorOccurrenceId");
 
-                    b.HasIndex("ErrorId");
-
                     b.HasIndex("SituationId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("ErrorEnvironmentId", "ErrorLevelId");
 
                     b.ToTable("ERROR_OCCURRENCE");
                 });
@@ -189,11 +195,6 @@ namespace CentralDeErros.Api.Migrations
 
             modelBuilder.Entity("CentralDeErros.Api.Models.ErrorOccurrence", b =>
                 {
-                    b.HasOne("CentralDeErros.Api.Models.Error", "Error")
-                        .WithMany()
-                        .HasForeignKey("ErrorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("CentralDeErros.Api.Models.Situation", "Situation")
                         .WithMany("ErrorOccurrences")
                         .HasForeignKey("SituationId")
@@ -202,6 +203,11 @@ namespace CentralDeErros.Api.Migrations
                     b.HasOne("CentralDeErros.Api.Models.Users", "User")
                         .WithMany("ErrorOccurrences")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CentralDeErros.Api.Models.Error", "Error")
+                        .WithMany()
+                        .HasForeignKey("ErrorEnvironmentId", "ErrorLevelId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
